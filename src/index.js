@@ -14,19 +14,31 @@ class NameForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    var url = 'https://fi-uber-test.free.beeceptor.com/users'
-    var data = {email: event.target.email.value,
-    password: event.target.password.value}
+    var url = "https://fi-uber-test.free.beeceptor.com/users";
+    var data = {
+      email: event.target.email.value,
+      password: event.target.password.value,
+    };
 
-    fetch(url, { 
-      method: "POST", 
-      body: JSON.stringify(data), 
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
       headers: {
-      'Content-Type': 'application/json'
-    }})
-  .then(response => response.json())
-  .then(json => console.log(json))
-  .catch(error => console.error(error))
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.text())
+      .catch((error) => console.error(error))
+      .then((response_text) =>
+        alert(
+          "Response: " +
+            response_text +
+            "\nEmail: " +
+            data.email +
+            "\nPassword: " +
+            data.password
+        )
+      );
   };
 
   render() {
@@ -64,4 +76,3 @@ root.render(
     </div>
   </>
 );
-
