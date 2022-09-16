@@ -14,15 +14,27 @@ class NameForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log(event.target.username.value);
-    console.log(event.target.password.value);
+    var url = 'https://fi-uber-test.free.beeceptor.com/users'
+    var data = {email: event.target.email.value,
+    password: event.target.password.value}
+
+    fetch(url, { 
+      method: "POST", 
+      body: JSON.stringify(data), 
+      headers: {
+      'Content-Type': 'application/json'
+    }})
+  .then(response => response.json())
+  .then(json => console.log(json))
+  .catch(error => console.error(error))
   };
+
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <div style={centered_style}>
           E-mail:
-          <input type="text" name="username" />
+          <input type="text" name="email" />
         </div>
         <div style={centered_style}>
           Password:
@@ -52,3 +64,5 @@ root.render(
     </div>
   </>
 );
+
+
