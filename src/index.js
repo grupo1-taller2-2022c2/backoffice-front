@@ -10,11 +10,42 @@ const centered_style = {
   justifyContent: "center",
 };
 
+class GetUsers extends React.Component {
+  handleSubmit = (event) => {
+    event.preventDefault();
+
+    var url = "http://fi-uber.herokuapp.com/users/";
+
+    fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => response.text())
+      .catch((error) => console.error(error))
+      .then((response_text) =>
+        alert(
+          response_text
+        )
+      );
+  };
+
+  render() {
+    return (
+      <button onClick={this.handleSubmit}>
+        <div style={centered_style}>
+          Get Users
+        </div>
+      </button>
+    );
+  }
+}
+
 class NameForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    var url = "https://fi-uber-test.free.beeceptor.com/users";
+    var url = "http://fi-uber.herokuapp.com/users/signin";
     var data = {
       email: event.target.email.value,
       password: event.target.password.value,
@@ -26,8 +57,7 @@ class NameForm extends React.Component {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((response) => response.text())
+    }).then((response) => response.text())
       .catch((error) => console.error(error))
       .then((response_text) =>
         alert(
@@ -39,6 +69,7 @@ class NameForm extends React.Component {
             data.password
         )
       );
+      
   };
 
   render() {
@@ -63,6 +94,7 @@ class NameForm extends React.Component {
 root.render(
   <>
     <h1>Welcome to FI-UBER v0.0.1</h1>
+    <GetUsers/>
     <NameForm />
     <div style={centered_style}>
       <p> Not yet registered? Sign up now for free!</p>
