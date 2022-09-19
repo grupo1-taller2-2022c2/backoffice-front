@@ -14,8 +14,8 @@ class GetUsers extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    var url = "http://fi-uber.herokuapp.com/users/";
-
+    var url = process.env.REACT_APP_BACKEND_DIRECTION + "/users/";
+    console.log("variable:" +url)
     fetch(url, {
       method: "GET",
       headers: {
@@ -45,7 +45,7 @@ class NameForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
 
-    var url = "http://fi-uber.herokuapp.com/users/signin";
+    var url = process.env.REACT_APP_BACKEND_DIRECTION + "/users/signin";
     var data = {
       email: event.target.email.value,
       password: event.target.password.value,
