@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
+import qs from "qs";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
@@ -10,92 +12,92 @@ const centered_style = {
   justifyContent: "center",
 };
 
-class GetUsers extends React.Component {
-  handleSubmit = (event) => {
-    event.preventDefault();
+function tryGetUsers() {
+  var url = process.env.REACT_APP_BACKEND_DIRECTION + "/users/";
+  console.log("variable:" + url);
 
-    var url = process.env.REACT_APP_BACKEND_DIRECTION + "/users/";
-    console.log("variable:" +url)
-    fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => response.text())
-      .catch((error) => console.error(error))
-      .then((response_text) =>
-        alert(
-          response_text
-        )
-      );
-  };
-
-  render() {
-    return (
-      <button onClick={this.handleSubmit}>
-        <div style={centered_style}>
-          Get Users
-        </div>
-      </button>
-    );
-  }
+  fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.text())
+    .catch((error) => console.error(error))
+    .then((response_text) => alert(response_text));
 }
 
-class NameForm extends React.Component {
-  handleSubmit = (event) => {
-    event.preventDefault();
+//Not tested
+function GetUsers() {
+  return (
+    <button onClick={tryGetUsers}>
+      <div style={centered_style}>Get Users</div>
+    </button>
+  );
+}
 
-    var url = process.env.REACT_APP_BACKEND_DIRECTION + "/users/signin";
-    var data = {
-      email: event.target.email.value,
-      password: event.target.password.value,
-    };
-
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((response) => response.text())
-      .catch((error) => console.error(error))
-      .then((response_text) =>
-        alert(
-          "Response: " +
-            response_text +
-            "\nEmail: " +
-            data.email +
-            "\nPassword: " +
-            data.password
-        )
-      );
-      
+function trySignIn(email, password, setToken) {
+  var url = process.env.REACT_APP_BACKEND_DIRECTION + "/token";
+  var user_info = {
+    username: email,
+    password: password,
   };
+  axios
+    .post(url, qs.stringify(user_info))
+    .then((response) => {
+      let token_data = response.data["access_token"];
+      setToken(token_data);
+      console.log("Got response at Admin Sign In!");
+      alert("Succesful Sign In!");
+    })
+    .catch((error) => {
+      console.log("Did not get response at Admin Sign In");
+      console.log(error);
+      alert("Please enter valid credentials");
+    });
+}
 
-  render() {
+function LoginForm () {
+  const [email, onChangeEmail] = useState("");
+  const [password, onChangePassword] = useState("");
+  const [token, setToken] = useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    trySignIn(email, password,setToken);
+  }
+
+  function handleEmailChange(event) {
+    onChangeEmail(event.target.value);
+  }
+
+  function handlePasswordChange(event) {
+    onChangePassword(event.target.value);
+  }
+  
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <div style={centered_style}>
           E-mail:
-          <input type="text" name="email" />
+          <input type="text" name="email" value={email} onChange={handleEmailChange} />
         </div>
         <div style={centered_style}>
           Password:
-          <input type="password" name="password"></input>
+          <input type="password" name="password" value={password} onChange={handlePasswordChange}/>
         </div>
         <div style={centered_style}>
           <button type="submit">Sign in</button>
         </div>
       </form>
     );
-  }
+
 }
 
 root.render(
   <>
-    <h1>Welcome to FI-UBER v0.0.1</h1>
-    <GetUsers/>
-    <NameForm />
+    <h1>FI-UBER v0.0.1 - User Administration</h1>
+    <GetUsers />
+    <LoginForm />
     <div style={centered_style}>
       <p> Not yet registered? Sign up now for free!</p>
       <button
