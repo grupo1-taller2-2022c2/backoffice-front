@@ -108,7 +108,7 @@ export default function LoginScreen() {
       <GetUsers />
       <SignInForm navigate={navigate} />
       <div style={centered_style}>
-        <p> Not yet registered? Sign up now for free!</p>
+        <p> Go to sign up</p>
         <button
           onClick={handleSignUpClick}
         >

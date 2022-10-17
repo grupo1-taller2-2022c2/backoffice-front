@@ -1,23 +1,39 @@
 import React, { useState } from "react";
 import axios from "axios";
-import qs from "qs";
-//import { centered_style } from "./styles";
+import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
 export default function SignUpScreen() {
+  const navigate = useNavigate()
   return (
     <div>
       <h1 style={centered_style}>Please enter your data for Sign Up</h1>
-      <SignUpForm />
+      <SignUpForm navigate={navigate}/>
     </div>
   );
 }
 
-const centered_style = {
-  display: "flex",
-  //alignItems: "center",
-  justifyContent: "center",
-  //verticalAlign: "top",
-};
+
+function trySignUp(email, password, name, surname, navigate) {
+    var url = process.env.REACT_APP_BACKEND_DIRECTION + "/admins/signup";
+    var user_info = {
+      email: email,
+      password: password,
+      username: name,
+      surname: surname,
+    };
+    axios
+      .post(url, user_info)
+      .then((response) => {
+        console.log("Got response at Admin Sign Up!");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log("Did not get response at Admin Sign Up");
+        console.log(error);
+        alert("Please enter valid credentials")
+        return;
+      })
+  }
 
 function SignUpForm({ navigate }) {
   const [email, onChangeEmail] = useState("");
@@ -28,7 +44,7 @@ function SignUpForm({ navigate }) {
 
   function handleSubmit(event, navigate) {
     event.preventDefault();
-    //trySignUp(email, password, setToken, navigate);
+    trySignUp(email, password, name, surname, navigate);
   }
 
   function handleEmailChange(event) {
@@ -56,7 +72,6 @@ function SignUpForm({ navigate }) {
       onSubmit={(e) => {
         handleSubmit(e, navigate);
       }}
-      //style={{display: "inline-block"}}
     >
       <div style={centered_style}>
         <input
