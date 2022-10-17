@@ -72,8 +72,8 @@ function SignInForm({navigate}) {
   return (
     <form onSubmit={(e) => {handleSubmit(e,navigate)}}>
       <div style={centered_style}>
-        E-mail:
         <input
+        placeholder="E-mail"
           type="text"
           name="email"
           value={email}
@@ -81,8 +81,8 @@ function SignInForm({navigate}) {
         />
       </div>
       <div style={centered_style}>
-        Password:
         <input
+        placeholder="Password"
           type="password"
           name="password"
           value={password}
