@@ -1,64 +1,38 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import qs from "qs";
-import {centered_style} from './styles';
-import {useNavigate} from 'react-router-dom';
+import { centered_style } from "./styles";
+import { useNavigate } from "react-router-dom";
+import { getUserToken } from "./UserContext";
 
-
-function tryGetUsers() {
-  var url = process.env.REACT_APP_BACKEND_DIRECTION + "/users/";
-  console.log("variable:" + url);
-
-  fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then((response) => response.text())
-    .catch((error) => console.error(error))
-    .then((response_text) => alert(response_text));
-}
-
-//Not tested
-function GetUsers() {
-  return (
-    <button onClick={tryGetUsers}>
-      <div style={centered_style}>Get Users</div>
-    </button>
-  );
-}
-
-function trySignIn(email, password, setToken, navigate) {
+async function trySignIn(email, password) {
   var url = process.env.REACT_APP_BACKEND_DIRECTION + "/token";
   var user_info = {
     username: email,
     password: password,
   };
-  axios
-    .post(url, qs.stringify(user_info))
-    .then((response) => {
-      let token_data = response.data["access_token"];
-      setToken(token_data);
-      console.log("Got response at Admin Sign In!");
-      navigate("/home");
-    })
-    .catch((error) => {
-      console.log("Did not get response at Admin Sign In");
-      console.log(error);
-      alert("Please enter valid credentials")
-      return;
-    })
+  return axios.post(url, qs.stringify(user_info));
 }
 
-function SignInForm({navigate}) {
+function SignInForm() {
+  const navigate = useNavigate();
+  const userToken = getUserToken();
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
-  const [token, setToken] = useState("");
 
-  function handleSubmit(event,navigate) {
+  async function handleSubmit(event, navigate) {
     event.preventDefault();
-    trySignIn(email, password, setToken, navigate)
+    try {
+      let response = await trySignIn(email, password);
+      let token_data = response.data["access_token"];
+      userToken.set(token_data);
+    } catch (error) {
+      console.log("Did not get response at Admin Sign In");
+      console.log(error);
+      alert("Please enter valid credentials");
+      return;
+    }
+
   }
 
   function handleEmailChange(event) {
@@ -70,10 +44,14 @@ function SignInForm({navigate}) {
   }
 
   return (
-    <form onSubmit={(e) => {handleSubmit(e,navigate)}}>
+    <form
+      onSubmit={(e) => {
+        handleSubmit(e, navigate);
+      }}
+    >
       <div style={centered_style}>
         <input
-        placeholder="E-mail"
+          placeholder="E-mail"
           type="text"
           name="email"
           value={email}
@@ -82,7 +60,7 @@ function SignInForm({navigate}) {
       </div>
       <div style={centered_style}>
         <input
-        placeholder="Password"
+          placeholder="Password"
           type="password"
           name="password"
           value={password}
@@ -98,23 +76,19 @@ function SignInForm({navigate}) {
 
 //FIXME should use callback hook
 export default function LoginScreen() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  function handleSignUpClick(){
-    navigate('/signup')
+  function handleSignUpClick() {
+    navigate("/signup");
   }
-    return (<>
+  return (
+    <>
       <h1>FI-UBER v0.0.1 - User Administration</h1>
-      <GetUsers />
-      <SignInForm navigate={navigate} />
+      <SignInForm />
       <div style={centered_style}>
         <p> Go to sign up</p>
-        <button
-          onClick={handleSignUpClick}
-        >
-          Sign up
-        </button>
+        <button onClick={handleSignUpClick}>Sign up</button>
       </div>
-    </>)
-  }
-  
+    </>
+  );
+}

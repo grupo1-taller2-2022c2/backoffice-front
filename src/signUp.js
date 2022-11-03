@@ -15,6 +15,7 @@ export default function SignUpScreen() {
 
 function trySignUp(email, password, name, surname, navigate) {
     var url = process.env.REACT_APP_BACKEND_DIRECTION + "/admins/signup";
+    console.log(url)
     var user_info = {
       email: email,
       password: password,
