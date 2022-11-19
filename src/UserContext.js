@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 //import * as SecureStore from "expo-secure-store";
 
 const UserTokenContext = React.createContext();
-export function getUserToken() {
+
+export function GetUserToken() {
   return useContext(UserTokenContext);
 }
 
