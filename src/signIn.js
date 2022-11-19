@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import qs from "qs";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
-import { getUserToken } from "./UserContext";
+import { GetUserToken } from "./UserContext";
+import {GATEWAY_URL} from "./Constants";
 
 async function trySignIn(email, password) {
-  var url = process.env.REACT_APP_BACKEND_DIRECTION + "/token";
+  var url = GATEWAY_URL + "/token";
   var user_info = {
     username: email,
     password: password,
@@ -16,7 +17,7 @@ async function trySignIn(email, password) {
 
 function SignInForm() {
   const navigate = useNavigate();
-  const userToken = getUserToken();
+  const userToken = GetUserToken();
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
@@ -32,6 +33,7 @@ function SignInForm() {
       alert("Please enter valid credentials");
       return;
     }
+    navigate("Home")
 
   }
 

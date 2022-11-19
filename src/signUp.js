@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
+import {GATEWAY_URL} from "./Constants";
+
 export default function SignUpScreen() {
   const navigate = useNavigate()
   return (
@@ -14,7 +16,7 @@ export default function SignUpScreen() {
 
 
 function trySignUp(email, password, name, surname, navigate) {
-    var url = process.env.REACT_APP_BACKEND_DIRECTION + "/admins/signup";
+    var url = GATEWAY_URL + "/admins/signup";
     console.log(url)
     var user_info = {
       email: email,

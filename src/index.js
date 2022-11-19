@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import MyRouter from "./router";
 import { RouterProvider } from "react-router-dom";
-import {UserStatusProvider} from "./UserContext";
+import { UserStatusProvider } from "./UserContext";
 
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    
+    <UserStatusProvider>
       <RouterProvider router={MyRouter} />
-   
+    </UserStatusProvider>
   </React.StrictMode>
 );
