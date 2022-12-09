@@ -1,13 +1,18 @@
 import React from "react";
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 import LoginScreen from "./signIn";
 import SignUpScreen from "./signUp";
 import HomeScreen from "./home";
+import { Route, Routes } from "react-router-dom";
+import { GetUserContext } from "./UserContext";
 
-const MyRouter = createBrowserRouter([
-  { path: "/signUp", element: <SignUpScreen /> },
-  { path: "/home", element: <HomeScreen />},
-  { path: "/", element: <LoginScreen />},
-]);
+export default function MyRoutes() {
+  const userContext = GetUserContext();
 
-export default MyRouter;
+  return (
+    <Routes>
+      <Route index path="/home" element={<HomeScreen />} />{" "}
+      <Route index element={<LoginScreen />} />
+      <Route path="/signUp" element={<SignUpScreen />} />
+    </Routes>
+  );
+}

@@ -1,26 +1,36 @@
 import React, { useContext, useState } from "react";
-//import * as SecureStore from "expo-secure-store";
 
-const UserTokenContext = React.createContext();
+const UserContext = React.createContext();
 
-export function GetUserToken() {
-  return useContext(UserTokenContext);
+export function GetUserContext() {
+  return useContext(UserContext);
 }
 
 export function UserStatusProvider({ children }) {
-    const [userToken, setUserToken] = useState(null);
+  const [userToken, setUserToken] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   //FIXME: maybe delete alert when token cant be deleted
   return (
-      <UserTokenContext.Provider
-        value={{
+    <UserContext.Provider
+      value={{
+        token: {
           value: userToken,
-          set: function (value) {
-            setUserToken(value)}
-          }
-        }
-      >
-        {children}
-      </UserTokenContext.Provider>
+        },
+        userStatus: {
+          isLoggedIn: isLoggedIn,
+          logIn: (token) => {
+            setUserToken(token)
+            setIsLoggedIn(true);
+          },
+          logOut: () => {
+            setUserToken("");
+            setIsLoggedIn(false)
+          },
+        },
+      }}
+    >
+      {children}
+    </UserContext.Provider>
   );
 }

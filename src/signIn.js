@@ -3,8 +3,8 @@ import axios from "axios";
 import qs from "qs";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
-import { GetUserToken } from "./UserContext";
-import {GATEWAY_URL} from "./Constants";
+import { GetUserContext } from "./UserContext";
+import { GATEWAY_URL } from "./Constants";
 
 async function trySignIn(email, password) {
   var url = GATEWAY_URL + "/token";
@@ -17,7 +17,7 @@ async function trySignIn(email, password) {
 
 function SignInForm() {
   const navigate = useNavigate();
-  const userToken = GetUserToken();
+  const context = GetUserContext();
   const [email, onChangeEmail] = useState("");
   const [password, onChangePassword] = useState("");
 
@@ -26,15 +26,15 @@ function SignInForm() {
     try {
       let response = await trySignIn(email, password);
       let token_data = response.data["access_token"];
-      userToken.set(token_data);
+      context.userStatus.logIn(token_data);
     } catch (error) {
       console.log("Did not get response at Admin Sign In");
       console.log(error);
       alert("Please enter valid credentials");
       return;
     }
-    navigate("Home")
-
+    navigate("../home")
+    console.log("logging in and status is " + context.userStatus.isLoggedIn)
   }
 
   function handleEmailChange(event) {
