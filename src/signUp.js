@@ -2,41 +2,29 @@ import React, { useState } from "react";
 import axios from "axios";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
-import {GATEWAY_URL} from "./Constants";
+import { GATEWAY_URL } from "./Constants";
 
 export default function SignUpScreen() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div>
       <h1 style={centered_style}>Please enter your data for Sign Up</h1>
-      <SignUpForm navigate={navigate}/>
+      <SignUpForm navigate={navigate} />
     </div>
   );
 }
 
-
-function trySignUp(email, password, name, surname, navigate) {
-    var url = GATEWAY_URL + "/admins/signup";
-    console.log(url)
-    var user_info = {
-      email: email,
-      password: password,
-      username: name,
-      surname: surname,
-    };
-    axios
-      .post(url, user_info)
-      .then((response) => {
-        console.log("Got response at Admin Sign Up!");
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log("Did not get response at Admin Sign Up");
-        console.log(error);
-        alert("Please enter valid credentials")
-        return;
-      })
-  }
+function trySignUp(email, password, name, surname) {
+  var url = GATEWAY_URL + "/admins/signup";
+  console.log(url);
+  var user_info = {
+    email: email,
+    password: password,
+    username: name,
+    surname: surname,
+  };
+  return axios.post(url, user_info);
+}
 
 function SignUpForm({ navigate }) {
   const [email, onChangeEmail] = useState("");
@@ -45,9 +33,22 @@ function SignUpForm({ navigate }) {
   const [name, onChangeName] = useState("");
   const [surname, onChangeSurname] = useState("");
 
-  function handleSubmit(event, navigate) {
+  async function handleSubmit(event, navigate) {
+    if (password != passwordRepeat){
+      alert("You must enter matching passwords")
+      return
+    }
     event.preventDefault();
-    trySignUp(email, password, name, surname, navigate);
+    try {
+      let response = trySignUp(email, password, name, surname);
+      console.log("Got response at Admin Sign Up!");
+      alert("Successfully signed up!");
+      navigate("/");
+    } catch (error) {
+      console.log("Did not get response at Admin Sign Up");
+      console.log(error);
+      alert("Could not sign up :(", "Please enter valid credentials");
+    }
   }
 
   function handleEmailChange(event) {
@@ -122,7 +123,9 @@ function SignUpForm({ navigate }) {
         />
       </div>
       <div style={centered_style}>
-        <button type="submit" style={{marginTop: 15}}>Sign up</button>
+        <button type="submit" style={{ marginTop: 15 }}>
+          Sign up
+        </button>
       </div>
     </form>
   );
