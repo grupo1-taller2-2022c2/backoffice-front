@@ -4,7 +4,7 @@ import MyRoutes from "./router";
 import { UserStatusProvider } from "./UserContext";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
-
+import {App} from "./App"
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
 root.render(
@@ -12,7 +12,7 @@ root.render(
     <BrowserRouter>
       <ChakraProvider>
         <UserStatusProvider>
-          <MyRoutes />
+        <App/>
         </UserStatusProvider>
       </ChakraProvider>
     </BrowserRouter>

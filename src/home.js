@@ -153,10 +153,11 @@ export default function HomeScreen() {
               </ModalBody>
 
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                <Button variant="ghost" mr={3} onClick={onClose}>
                   Cerrar
                 </Button>
-                <Button variant="ghost">Aplicar</Button>
+                <Button colorScheme="blue" margin={5}>Cargar Saldo</Button>
+                <Button colorScheme="blue">Bloquear</Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
