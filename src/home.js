@@ -13,40 +13,36 @@ async function tryGetUsers(token) {
 
 function UsersList(list){
     const users = list.users
-    return (<div>
+
+    return(<></>)
+    /*return (<div>
 
         <li>{users[0].email}</li>
         <li>{users[1].email}</li>
         <li>{users[2].email}</li>
         <li>{users[3].email}</li>
         
-    </div>)
+    </div>)*/
 }
 
 export default function HomeScreen() {
     const token = GetUserToken()
-    const [usersListed, setUsersListed] = useState(false);
     const [users, setUsers] = useState(false);
     async function handleListUsers() {
-        if(usersListed){
-            setUsersListed(false)
-            return
-        }
-        setUsersListed(true)
         try{
             let userToken = token.value
             let response = await tryGetUsers(userToken);
+            console.log(response)
             setUsers(response.data)
         }
         catch(e){
             console.log(e)
-            setUsersListed(false)
         }
     }
     
     return (<div>
         <h1>Welcome to Home!</h1>
         <button onClick={handleListUsers}>List Users</button>
-        {usersListed && <UsersList users={users} />}
+        <UsersList users={users} />
     </div>)
 }
