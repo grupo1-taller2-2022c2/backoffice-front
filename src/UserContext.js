@@ -7,25 +7,29 @@ export function GetUserContext() {
 }
 
 export function UserStatusProvider({ children }) {
-  const [userToken, setUserToken] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const token = "token";
+  const isLoggedIn = "isLoggedIn";
+
+  function parse(i){
+    return JSON.parse(i)
+  }
 
   //FIXME: maybe delete alert when token cant be deleted
   return (
     <UserContext.Provider
       value={{
         token: {
-          value: userToken,
+          value: parse(localStorage.getItem(token)),
         },
         userStatus: {
-          isLoggedIn: isLoggedIn,
-          logIn: (token) => {
-            setUserToken(token)
-            setIsLoggedIn(true);
+          isLoggedIn: parse(localStorage.getItem(isLoggedIn)),
+          logIn: (newToken) => {
+            localStorage.setItem(token, JSON.stringify(newToken));
+            localStorage.setItem(isLoggedIn, JSON.stringify(true));
           },
           logOut: () => {
-            setUserToken("");
-            setIsLoggedIn(false)
+            localStorage.setItem(token, JSON.stringify(""));
+            localStorage.setItem(isLoggedIn, JSON.stringify(false));
           },
         },
       }}
