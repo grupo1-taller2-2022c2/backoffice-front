@@ -1,11 +1,9 @@
-import { USERS_EP, GATEWAY_URL, BLOCK_USER_EP, UNBLOCK_USER_EP } from "./Constants";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { GetUserContext } from "./UserContext";
 import { ViewIcon } from "@chakra-ui/icons";
-
+import { tryGetUsers, tryBlockUser, tryUnblockUser } from "./Backend";
 import {
   Box,
   Button,
@@ -30,33 +28,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-async function tryGetUsers(token) {
-  var url = GATEWAY_URL + USERS_EP;
-  return axios.get(url, {
-    headers: { Authorization: "Bearer " + token },
-  });
-}
-async function tryBlockUser(token, email) {
-  var url = GATEWAY_URL + BLOCK_USER_EP + email;
-  return axios.post(
-    url,
-    {},
-    {
-      headers: { Authorization: "Bearer " + token },
-    }
-  );
-}
-
-async function tryUnblockUser(token, email) {
-  var url = GATEWAY_URL + UNBLOCK_USER_EP + email;
-  return axios.post(
-    url,
-    {},
-    {
-      headers: { Authorization: "Bearer " + token },
-    }
-  );
-}
 export default function HomeScreen() {
   const context = GetUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -80,8 +51,7 @@ export default function HomeScreen() {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        let userToken = context.token.value;
-        let response = await tryGetUsers(userToken);
+        let response = await tryGetUsers();
         console.log(response.data);
         setUsuariosTotales(response.data);
         setUsuariosVisualizados(response.data);
@@ -95,28 +65,26 @@ export default function HomeScreen() {
   async function handleBlock() {
     console.log("Blocking...");
     try {
-      let userToken = context.token.value;
-      let response = await tryBlockUser(userToken, usuarioSeleccionado.email);
+      let response = await tryBlockUser(usuarioSeleccionado.email);
     } catch (e) {
       console.log(e);
       alert("Error: No se pudo bloquear al usuario");
       return;
     }
-    usuarioSeleccionado.blocked = true
+    usuarioSeleccionado.blocked = true;
     alert("Exito: Usuario bloqueado");
   }
 
-  async function handleUnblock(){
+  async function handleUnblock() {
     console.log("Unblocking...");
     try {
-      let userToken = context.token.value;
-      let response = await tryUnblockUser(userToken, usuarioSeleccionado.email);
+      let response = await tryUnblockUser(usuarioSeleccionado.email);
     } catch (e) {
       console.log(e);
       alert("Error: No se pudo desbloquear al usuario");
       return;
     }
-    usuarioSeleccionado.blocked = false
+    usuarioSeleccionado.blocked = false;
     alert("Exito: Usuario desbloqueado");
   }
   return (
@@ -216,12 +184,15 @@ export default function HomeScreen() {
                 <Button
                   colorScheme="blue"
                   onClick={async () => {
-
-                    usuarioSeleccionado && usuarioSeleccionado.blocked ? (handleUnblock()): (handleBlock())
+                    usuarioSeleccionado && usuarioSeleccionado.blocked
+                      ? handleUnblock()
+                      : handleBlock();
                     setActualizar(!actualizar);
                   }}
                 >
-                  {usuarioSeleccionado && usuarioSeleccionado.blocked ? "Desbloquear" : "Bloquear"}
+                  {usuarioSeleccionado && usuarioSeleccionado.blocked
+                    ? "Desbloquear"
+                    : "Bloquear"}
                 </Button>
               </ModalFooter>
             </ModalContent>

@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
-import { GATEWAY_URL } from "./Constants";
-
+import {trySignUp} from "./Backend"
 export default function SignUpScreen() {
   const navigate = useNavigate();
   return (
@@ -14,17 +13,6 @@ export default function SignUpScreen() {
   );
 }
 
-function trySignUp(email, password, name, surname) {
-  var url = GATEWAY_URL + "/admins/signup";
-  console.log(url);
-  var user_info = {
-    email: email,
-    password: password,
-    username: name,
-    surname: surname,
-  };
-  return axios.post(url, user_info);
-}
 
 function SignUpForm({ navigate }) {
   const [email, onChangeEmail] = useState("");
@@ -35,19 +23,19 @@ function SignUpForm({ navigate }) {
 
   async function handleSubmit(event, navigate) {
     if (password != passwordRepeat){
-      alert("You must enter matching passwords")
+      alert("Las contraseñas no coinciden")
       return
     }
     event.preventDefault();
     try {
       let response = trySignUp(email, password, name, surname);
       console.log("Got response at Admin Sign Up!");
-      alert("Successfully signed up!");
+      alert("Se ha creado una cuenta con exito!");
       navigate("/");
     } catch (error) {
       console.log("Did not get response at Admin Sign Up");
       console.log(error);
-      alert("Could not sign up :(", "Please enter valid credentials");
+      alert("No se pudo completar el registro");
     }
   }
 
