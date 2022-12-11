@@ -73,7 +73,6 @@ export default function HomeScreen() {
 
   return (
     <div>
-      <h1>Welcome to Home!</h1>
       {usuariosVisualizados ? (
         <Box
           overflowY="auto"
