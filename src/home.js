@@ -1,4 +1,4 @@
-import { USERS_EP, GATEWAY_URL } from "./Constants";
+import { USERS_EP, GATEWAY_URL, BLOCK_USER_EP, UNBLOCK_USER_EP } from "./Constants";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { centered_style } from "./styles";
@@ -36,13 +36,34 @@ async function tryGetUsers(token) {
     headers: { Authorization: "Bearer " + token },
   });
 }
+async function tryBlockUser(token, email) {
+  var url = GATEWAY_URL + BLOCK_USER_EP + email;
+  return axios.post(
+    url,
+    {},
+    {
+      headers: { Authorization: "Bearer " + token },
+    }
+  );
+}
 
+async function tryUnblockUser(token, email) {
+  var url = GATEWAY_URL + UNBLOCK_USER_EP + email;
+  return axios.post(
+    url,
+    {},
+    {
+      headers: { Authorization: "Bearer " + token },
+    }
+  );
+}
 export default function HomeScreen() {
   const context = GetUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [usuariosTotales, setUsuariosTotales] = useState(null);
   const [usuariosVisualizados, setUsuariosVisualizados] = useState(null);
   const [usuarioSeleccionado, setUsuariosSeleccionado] = useState(null);
+  const [actualizar, setActualizar] = useState(false);
 
   /*async function handleListUsers() {
         try{
@@ -69,8 +90,35 @@ export default function HomeScreen() {
       }
     };
     getUsers();
-  }, []);
+  }, [actualizar]);
 
+  async function handleBlock() {
+    console.log("Blocking...");
+    try {
+      let userToken = context.token.value;
+      let response = await tryBlockUser(userToken, usuarioSeleccionado.email);
+    } catch (e) {
+      console.log(e);
+      alert("Error: No se pudo bloquear al usuario");
+      return;
+    }
+    usuarioSeleccionado.blocked = true
+    alert("Exito: Usuario bloqueado");
+  }
+
+  async function handleUnblock(){
+    console.log("Unblocking...");
+    try {
+      let userToken = context.token.value;
+      let response = await tryUnblockUser(userToken, usuarioSeleccionado.email);
+    } catch (e) {
+      console.log(e);
+      alert("Error: No se pudo desbloquear al usuario");
+      return;
+    }
+    usuarioSeleccionado.blocked = false
+    alert("Exito: Usuario desbloqueado");
+  }
   return (
     <div>
       {usuariosVisualizados ? (
@@ -107,6 +155,7 @@ export default function HomeScreen() {
                     <Th>Email</Th>
                     <Th>Nombre</Th>
                     <Th>Apellido</Th>
+                    <Th>Bloqueado</Th>
                     <Th isNumeric>Visualizar</Th>
                   </Tr>
                 </Thead>
@@ -116,6 +165,7 @@ export default function HomeScreen() {
                       <Td>{usuario.email}</Td>
                       <Td>{usuario.username}</Td>
                       <Td>{usuario.surname}</Td>
+                      <Td>{usuario.blocked ? "Si" : "No"}</Td>
                       <Th isNumeric>
                         <IconButton
                           onClick={() => {
@@ -143,10 +193,15 @@ export default function HomeScreen() {
                 {usuarioSeleccionado ? (
                   <>
                     {" "}
-                    <Text>{usuarioSeleccionado.email}</Text>
-                    <Text>{usuarioSeleccionado.username}</Text>
-                    <Text>{usuarioSeleccionado.surname}</Text>
-                    <Text>{usuarioSeleccionado.ratings}</Text>
+                    <Text>Email: {usuarioSeleccionado.email}</Text>
+                    <Text>
+                      Nombre: {usuarioSeleccionado.username}{" "}
+                      {usuarioSeleccionado.surname}
+                    </Text>
+                    <Text>Rating: {usuarioSeleccionado.ratings}/5</Text>
+                    <Text>
+                      Bloqueado: {usuarioSeleccionado.blocked ? "Si" : "No"}
+                    </Text>
                   </>
                 ) : null}
               </ModalBody>
@@ -155,8 +210,19 @@ export default function HomeScreen() {
                 <Button variant="ghost" mr={3} onClick={onClose}>
                   Cerrar
                 </Button>
-                <Button colorScheme="blue" margin={5}>Cargar Saldo</Button>
-                <Button colorScheme="blue">Bloquear</Button>
+                <Button colorScheme="blue" margin={5}>
+                  Cargar Saldo
+                </Button>
+                <Button
+                  colorScheme="blue"
+                  onClick={async () => {
+
+                    usuarioSeleccionado && usuarioSeleccionado.blocked ? (handleUnblock()): (handleBlock())
+                    setActualizar(!actualizar);
+                  }}
+                >
+                  {usuarioSeleccionado && usuarioSeleccionado.blocked ? "Desbloquear" : "Bloquear"}
+                </Button>
               </ModalFooter>
             </ModalContent>
           </Modal>
