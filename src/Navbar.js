@@ -1,6 +1,11 @@
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
+import {Button} from "@chakra-ui/react"
 import {navbarItem} from "./styles"
+import { GetUserContext } from "./UserContext"
+
 export default function Navbar() {
+  const context = GetUserContext()
+
   return (
     <nav
       className="nav"
@@ -25,6 +30,10 @@ export default function Navbar() {
       >
         <CustomLink style={navbarItem} to="/home">Home</CustomLink>
         <CustomLink style={navbarItem} to="/metricas">Metricas</CustomLink>
+        <CustomLink style={navbarItem} to="/reglas-cotizacion">Reglas de Cotizacion</CustomLink>
+      </ul>
+      <ul style={{listStyle: "none"}}>
+        <CustomLink style={navbarItem} to="/">Log out</CustomLink>
       </ul>
     </nav>
   );

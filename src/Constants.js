@@ -3,3 +3,5 @@ export const ACCESS_EP = "/admins/grantaccess"
 export const USERS_EP = "/users/"
 export const BLOCK_USER_EP = "/users/blocked/"
 export const UNBLOCK_USER_EP = "/users/unblocked/"
+
+export const PAGE_UNAVAILABLE_MSG = "Content unavailable"

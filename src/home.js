@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { GetUserContext } from "./UserContext";
 import { ViewIcon } from "@chakra-ui/icons";
 import { tryGetUsers, tryBlockUser, tryUnblockUser } from "./Backend";
+import {PAGE_UNAVAILABLE_MSG} from "./Constants"
 import {
   Box,
   Button,
@@ -86,6 +87,10 @@ export default function HomeScreen() {
     }
     usuarioSeleccionado.blocked = false;
     alert("Exito: Usuario desbloqueado");
+  }
+
+  if (!context.userStatus.isLoggedIn){
+    return <h2>{PAGE_UNAVAILABLE_MSG}</h2>
   }
   return (
     <div>

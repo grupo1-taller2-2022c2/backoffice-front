@@ -21,6 +21,7 @@ function SignInForm() {
 
   useEffect(() => {
     context.atSignIn.set(true);
+    context.userStatus.logOut()
   }, []);
 
   async function handleSubmit(event, navigate) {
