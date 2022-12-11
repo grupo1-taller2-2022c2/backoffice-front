@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { GetUserContext } from "./UserContext";
 import { ViewIcon } from "@chakra-ui/icons";
 import { tryGetUsers, tryBlockUser, tryUnblockUser } from "./Backend";
-import {PAGE_UNAVAILABLE_MSG} from "./Constants"
+import { PAGE_UNAVAILABLE_MSG } from "./Constants";
 import {
   Box,
   Button,
@@ -89,8 +89,8 @@ export default function HomeScreen() {
     alert("Exito: Usuario desbloqueado");
   }
 
-  if (!context.userStatus.isLoggedIn){
-    return <h2>{PAGE_UNAVAILABLE_MSG}</h2>
+  if (!context.userStatus.isLoggedIn) {
+    return <h2>{PAGE_UNAVAILABLE_MSG}</h2>;
   }
   return (
     <div>
@@ -129,6 +129,7 @@ export default function HomeScreen() {
                     <Th>Nombre</Th>
                     <Th>Apellido</Th>
                     <Th>Bloqueado</Th>
+                    <Th>Chofer</Th>
                     <Th isNumeric>Visualizar</Th>
                   </Tr>
                 </Thead>
@@ -139,6 +140,8 @@ export default function HomeScreen() {
                       <Td>{usuario.username}</Td>
                       <Td>{usuario.surname}</Td>
                       <Td>{usuario.blocked ? "Si" : "No"}</Td>
+                      <Td>{usuario.driver ? "Si" : "No"}</Td>
+
                       <Th isNumeric>
                         <IconButton
                           onClick={() => {
@@ -174,6 +177,20 @@ export default function HomeScreen() {
                     <Text>Rating: {usuarioSeleccionado.ratings}/5</Text>
                     <Text>
                       Bloqueado: {usuarioSeleccionado.blocked ? "Si" : "No"}
+                    </Text>
+                  </>
+                ) : null}
+
+                {usuarioSeleccionado && usuarioSeleccionado.driver != null ? (
+                  <>
+                    <Text>
+                      License Plate: {usuarioSeleccionado.driver.licence_plate}
+                    </Text>
+                    <Text>
+                      Vehicle Model: {usuarioSeleccionado.driver.model}
+                    </Text>
+                    <Text>
+                      Driver Rating: {usuarioSeleccionado.driver.ratings}
                     </Text>
                   </>
                 ) : null}
