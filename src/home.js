@@ -27,6 +27,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Text,
+  Select,
 } from "@chakra-ui/react";
 
 export default function HomeScreen() {
@@ -48,6 +49,43 @@ export default function HomeScreen() {
             console.log(e)
         }
     }*/
+
+  function filtrarUsuarios(e) {
+    const filtro = e.target.value;
+    if (filtro === "") {
+      setUsuariosVisualizados(usuariosTotales);
+      return;
+    }
+
+    let desired_state;
+    filtro.startsWith("NO") ? (desired_state = false) : (desired_state = true);
+
+    if (filtro.includes("BLOQUEADOS")) {
+      setUsuariosVisualizados(
+        usuariosTotales.filter((p) => p.blocked === desired_state)
+      );
+    } else {
+      desired_state
+        ? setUsuariosVisualizados(
+            usuariosTotales.filter((p) => p.driver != null)
+          )
+        : setUsuariosVisualizados(
+            usuariosTotales.filter((p) => p.driver === null)
+          );
+    }
+  }
+
+  function filtrarPorMail(e) {
+    const filtro = e.target.value;
+
+    if (filtro === "") {
+      setUsuariosVisualizados(usuariosTotales);
+      return;
+    }
+    setUsuariosVisualizados(
+      usuariosTotales.filter((u) => u.email.startsWith(filtro))
+    );
+  }
 
   useEffect(() => {
     const getUsers = async () => {
@@ -115,6 +153,27 @@ export default function HomeScreen() {
             },
           }}
         >
+          <Box display={"flex"} gap={10}>
+            <Input
+              marginLeft={5}
+              marginBottom={10}
+              bg="white"
+              w={"40%"}
+              placeholder="Buscar usuario por mail..."
+              onChange={filtrarPorMail}
+            />
+            <Select
+              bg="white"
+              placeholder="Todos"
+              width="60"
+              onChange={filtrarUsuarios}
+            >
+              <option value="BLOQUEADOS">Bloqueados</option>
+              <option value="NO BLOQUEADOS">No Bloqueados</option>
+              <option value="CHOFERES">Choferes</option>
+              <option value="NO CHOFERES">No Choferes</option>
+            </Select>
+          </Box>
           <Box
             justifyContent={"center"}
             display={"flex"}
