@@ -4,5 +4,7 @@ export const USERS_EP = "/users/"
 export const BLOCK_USER_EP = "/users/blocked/"
 export const UNBLOCK_USER_EP = "/users/unblocked/"
 export const METRICS_BLOCKED_EP = "/metrics/blocked_users/"
+export const METRICS_LOGINS_EP = "/metrics/logins"
+export const METRICS_REGISTRATIONS_EP = "/metrics/registrations"
 
 export const PAGE_UNAVAILABLE_MSG = "Content unavailable"

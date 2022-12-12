@@ -5,6 +5,8 @@ import {
   UNBLOCK_USER_EP,
   ACCESS_EP,
   METRICS_BLOCKED_EP,
+  METRICS_LOGINS_EP,
+  METRICS_REGISTRATIONS_EP
 } from "./Constants";
 
 import axios from "axios";
@@ -53,6 +55,24 @@ export function trySignUp(email, password, name, surname) {
 
 export function tryGetAmountBlockedUsers(token) {
   return axios.get(GATEWAY_URL + METRICS_BLOCKED_EP, {
+    headers: { Authorization: "Bearer " + token },
+  });
+}
+
+export function tryGetAmountLogins(token, method, date) {
+  console.log(method)
+  console.log(date)
+  return axios.get(GATEWAY_URL + METRICS_LOGINS_EP, {
+    params: {method: method, from_date:date},
+    headers: { Authorization: "Bearer " + token },
+  });
+}
+
+
+
+export function tryGetAmountRegisters(token, method, date) {
+  return axios.get(GATEWAY_URL + METRICS_REGISTRATIONS_EP, {
+    params: {method: method, from_date:date},
     headers: { Authorization: "Bearer " + token },
   });
 }
