@@ -4,6 +4,7 @@ import {
   BLOCK_USER_EP,
   UNBLOCK_USER_EP,
   ACCESS_EP,
+  METRICS_BLOCKED_EP
 } from "./Constants";
 
 import axios from "axios";
@@ -43,3 +44,9 @@ export function trySignUp(email, password, name, surname) {
   };
   return axios.post(url, user_info);
 }
+
+
+export function tryGetAmountBlockedUsers(){
+  return axios.get(GATEWAY_URL + METRICS_BLOCKED_EP)
+}
+  
