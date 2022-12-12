@@ -38,6 +38,7 @@ function SignInForm() {
       return;
     }
     navigate("../home");
+    context.atSignIn.set(false)
   }
 
   function handleEmailChange(event) {

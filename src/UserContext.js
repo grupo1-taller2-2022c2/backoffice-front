@@ -9,8 +9,8 @@ export function GetUserContext() {
 export function UserStatusProvider({ children }) {
   const token = "token";
   const isLoggedIn = "isLoggedIn";
-  const [localLoggedIn, setLocalLoggedIn] = useState(parse(sessionStorage.getItem(isLoggedIn)))
-  const [atSignIn, setAtSignIn] = useState(true)
+  const [localLoggedIn, setLocalLoggedIn] = useState(parse(localStorage.getItem(isLoggedIn)))
+  const [atSignIn, setAtSignIn] = useState(false)
 
   function parse(i){
     return JSON.parse(i)
@@ -29,12 +29,12 @@ export function UserStatusProvider({ children }) {
           isLoggedIn: localLoggedIn,
           logIn: (newToken) => {
             sessionStorage.setItem(token, JSON.stringify(newToken));
-            sessionStorage.setItem(isLoggedIn, JSON.stringify(true));
+            localStorage.setItem(isLoggedIn, JSON.stringify(true));
             setLocalLoggedIn(true)
           },
           logOut: () => {
             sessionStorage.setItem(token, JSON.stringify(""));
-            sessionStorage.setItem(isLoggedIn, JSON.stringify(false));
+            localStorage.setItem(isLoggedIn, JSON.stringify(false));
             setLocalLoggedIn(false)
           },
         },
