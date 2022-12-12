@@ -20,19 +20,20 @@ export function UserStatusProvider({ children }) {
   return (
     <UserContext.Provider
       value={{
-        /*token: {
-          value: parse(sessionStorage.getItem(token)),
-        },*/
+        token: {
+          value: () => {
+            return sessionStorage.getItem(token)}
+        },
         atSignIn: {value: atSignIn, set: (v) => {setAtSignIn(v)}},
         userStatus: {
           isLoggedIn: localLoggedIn,
-          logIn: () => {
-            //sessionStorage.setItem(token, JSON.stringify(newToken));
+          logIn: (newToken) => {
+            sessionStorage.setItem(token, JSON.stringify(newToken));
             sessionStorage.setItem(isLoggedIn, JSON.stringify(true));
             setLocalLoggedIn(true)
           },
           logOut: () => {
-            //sessionStorage.setItem(token, JSON.stringify(""));
+            sessionStorage.setItem(token, JSON.stringify(""));
             sessionStorage.setItem(isLoggedIn, JSON.stringify(false));
             setLocalLoggedIn(false)
           },

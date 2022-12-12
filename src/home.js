@@ -90,7 +90,8 @@ export default function HomeScreen() {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        let response = await tryGetUsers();
+        let token = context.token.value()
+        let response = await tryGetUsers(token);
         console.log(response.data);
         setUsuariosTotales(response.data);
         setUsuariosVisualizados(response.data);
@@ -104,7 +105,8 @@ export default function HomeScreen() {
   async function handleBlock() {
     console.log("Blocking...");
     try {
-      let response = await tryBlockUser(usuarioSeleccionado.email);
+      let token = context.token.value()
+      let response = await tryBlockUser(token,usuarioSeleccionado.email);
     } catch (e) {
       console.log(e);
       alert("Error: No se pudo bloquear al usuario");
@@ -117,7 +119,8 @@ export default function HomeScreen() {
   async function handleUnblock() {
     console.log("Unblocking...");
     try {
-      let response = await tryUnblockUser(usuarioSeleccionado.email);
+      let token = context.token.value()
+      let response = await tryUnblockUser(token,usuarioSeleccionado.email);
     } catch (e) {
       console.log(e);
       alert("Error: No se pudo desbloquear al usuario");

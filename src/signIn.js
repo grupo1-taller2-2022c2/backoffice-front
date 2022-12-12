@@ -28,6 +28,8 @@ function SignInForm() {
     event.preventDefault();
     try {
       let response = await trySignIn(email, password);
+      let token_data = response.data["access_token"];
+      context.userStatus.logIn(token_data);
       context.userStatus.logIn();
     } catch (error) {
       console.log("Did not get response at Admin Sign In");

@@ -36,7 +36,8 @@ export default function Metricas() {
   useEffect(() => {
     const getUsuariosBloqueados = async () => {
       try {
-        let response = await tryGetAmountBlockedUsers();
+        let token = context.token.value();
+        let response = await tryGetAmountBlockedUsers(token);
         setCantidadUsuariosBloqueados(response.data);
       } catch (e) {
         console.log(e);
