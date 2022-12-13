@@ -6,13 +6,15 @@ import {
   ACCESS_EP,
   METRICS_BLOCKED_EP,
   METRICS_LOGINS_EP,
-  METRICS_REGISTRATIONS_EP
+  METRICS_REGISTRATIONS_EP,
+  PRICING_EP
 } from "./Constants";
-
+import qs from "qs";
 import axios from "axios";
 
 export async function tryGetUsers(token) {
   var url = GATEWAY_URL + USERS_EP;
+  console.log("TRYING TOKEN")
   return axios.get(url, {
     headers: { Authorization: "Bearer " + token },
   });
@@ -35,11 +37,12 @@ export async function tryUnblockUser(token, email) {
 export async function trySignIn(email, password) {
   var url = GATEWAY_URL + ACCESS_EP;
   var user_info = {
-    email: email,
+    username: email,
     password: password,
   };
-  return axios.post(url, user_info);
+  return axios.post(url, qs.stringify(user_info));
 }
+
 
 export function trySignUp(email, password, name, surname) {
   var url = GATEWAY_URL + "/admins/signup";
@@ -73,6 +76,12 @@ export function tryGetAmountLogins(token, method, date) {
 export function tryGetAmountRegisters(token, method, date) {
   return axios.get(GATEWAY_URL + METRICS_REGISTRATIONS_EP, {
     params: {method: method, from_date:date},
+    headers: { Authorization: "Bearer " + token },
+  });
+}
+
+export function tryGetCurrentPricing(token) {
+  return axios.get(GATEWAY_URL + PRICING_EP, {
     headers: { Authorization: "Bearer " + token },
   });
 }

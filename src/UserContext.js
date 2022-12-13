@@ -22,7 +22,7 @@ export function UserStatusProvider({ children }) {
       value={{
         token: {
           value: () => {
-            return sessionStorage.getItem(token)}
+            return sessionStorage.getItem(token).slice(1,-1)}
         },
         atSignIn: {value: atSignIn, set: (v) => {setAtSignIn(v)}},
         userStatus: {

@@ -2,6 +2,7 @@ import { PAGE_UNAVAILABLE_MSG } from "./Constants";
 import { GetUserContext } from "./UserContext";
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
+import { tryGetCurrentPricing } from "./Backend";
 import {
   Box,
   Button,
@@ -191,6 +192,32 @@ export default function ReglasCotizacion() {
           <Box alignContent={"flex-end"}>
             <Button backgroundColor={"#1273de"} marginTop={2}>
               Actualizar reglas
+            </Button>
+            <Button
+              marginLeft={5}
+              onClick={async () => {
+                try {
+                  let token = context.token.value();
+                  let response = await tryGetCurrentPricing(token);
+                  console.log(response.data);
+                  alert(`Valores actuales: 
+                  Base: ${response.data.base} 
+                  Busy Hours: ${response.data.busy_hours}
+                  Busy Hours extra charge: ${response.data.busy_hours_extra}
+                  Special days of week: ${response.data.days_of_week}
+                  Special days extra charge: ${response.data.week_day_extra}
+                  Distance cost multiplier: ${response.data.distance}
+                  Duration cost multiplier: ${response.data.duration}
+                  Passenger rating multiplier${response.data.passenger_rating}
+                  `);
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
+              backgroundColor={"#1273de"}
+              marginTop={2}
+            >
+              Ver reglas
             </Button>
           </Box>
         </Box>

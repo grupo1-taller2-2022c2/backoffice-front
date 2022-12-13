@@ -1,17 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import qs from "qs";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { GetUserContext } from "./UserContext";
 import { trySignIn } from "./Backend";
-/*async function trySignIn(email, password) {
-  var url = GATEWAY_URL + "/token";
-  var user_info = {
-    username: email,
-    password: password,
-  };
-  return axios.post(url, qs.stringify(user_info));
-}*/
 
 function SignInForm() {
   const navigate = useNavigate();
@@ -30,7 +21,6 @@ function SignInForm() {
       let response = await trySignIn(email, password);
       let token_data = response.data["access_token"];
       context.userStatus.logIn(token_data);
-      context.userStatus.logIn();
     } catch (error) {
       console.log("Did not get response at Admin Sign In");
       console.log(error);
