@@ -90,7 +90,7 @@ export default function ListaUsuarios() {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        let token = context.token.value()
+        let token = context.token.value();
         let response = await tryGetUsers(token);
         console.log(response.data);
         setUsuariosTotales(response.data);
@@ -105,8 +105,8 @@ export default function ListaUsuarios() {
   async function handleBlock() {
     console.log("Blocking...");
     try {
-      let token = context.token.value()
-      let response = await tryBlockUser(token,usuarioSeleccionado.email);
+      let token = context.token.value();
+      let response = await tryBlockUser(token, usuarioSeleccionado.email);
     } catch (e) {
       console.log(e);
       alert("Error: No se pudo bloquear al usuario");
@@ -119,8 +119,8 @@ export default function ListaUsuarios() {
   async function handleUnblock() {
     console.log("Unblocking...");
     try {
-      let token = context.token.value()
-      let response = await tryUnblockUser(token,usuarioSeleccionado.email);
+      let token = context.token.value();
+      let response = await tryUnblockUser(token, usuarioSeleccionado.email);
     } catch (e) {
       console.log(e);
       alert("Error: No se pudo desbloquear al usuario");
@@ -142,7 +142,6 @@ export default function ListaUsuarios() {
           maxH="full"
           rounded="sm"
           bg="gray.300"
-          py="10"
           css={{
             "&::-webkit-scrollbar": {
               width: "4px",

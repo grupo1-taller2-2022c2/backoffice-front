@@ -16,7 +16,7 @@ export default function Navbar() {
         justifyContent: "space-between",
         alignItems: "stretch",
         gap: 2,
-        padding: 1,
+        padding: 5,
       }}
     >
       <ul

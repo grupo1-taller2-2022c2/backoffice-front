@@ -5,9 +5,14 @@ import { UserStatusProvider } from "./UserContext";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import {App} from "./App"
+import {Helmet} from 'react-helmet';
+
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
-root.render(
+root.render(<>
+  <Helmet>
+  <style>{'body { background-color: #CFD8DC; }'}</style>
+    </Helmet>
   <React.StrictMode>
     <BrowserRouter>
       <ChakraProvider>
@@ -17,4 +22,5 @@ root.render(
       </ChakraProvider>
     </BrowserRouter>
   </React.StrictMode>
+  </>
 );

@@ -68,7 +68,6 @@ export default function ReglasCotizacion() {
         maxH="full"
         rounded="sm"
         bg="gray.300"
-        py="10"
         css={{
           "&::-webkit-scrollbar": {
             width: "4px",
