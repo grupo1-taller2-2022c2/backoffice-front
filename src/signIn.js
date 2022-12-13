@@ -37,7 +37,7 @@ function SignInForm() {
       alert("Por favor ingrese datos validos");
       return;
     }
-    navigate("../home");
+    navigate("../usuarios");
     context.atSignIn.set(false)
   }
 

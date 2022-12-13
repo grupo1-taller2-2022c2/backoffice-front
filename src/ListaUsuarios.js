@@ -30,7 +30,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 
-export default function HomeScreen() {
+export default function ListaUsuarios() {
   const context = GetUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [usuariosTotales, setUsuariosTotales] = useState(null);

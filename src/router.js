@@ -1,7 +1,7 @@
 import React from "react";
 import LoginScreen from "./signIn";
 import SignUpScreen from "./signUp";
-import HomeScreen from "./home";
+import ListaUsuarios from "./ListaUsuarios";
 import Metricas from "./Metricas";
 import ReglasCotizacion from "./ReglasCotizacion"
 import { Route, Routes } from "react-router-dom";
@@ -13,7 +13,7 @@ export default function MyRoutes() {
 
   return (
     <Routes>
-      <Route path="/home" element={<HomeScreen />} />
+      <Route path="/usuarios" element={<ListaUsuarios />} />
       <Route path="/metricas" element={<Metricas />} />
       <Route index element={<LoginScreen />} />
       <Route path="/signUp" element={<SignUpScreen />} />

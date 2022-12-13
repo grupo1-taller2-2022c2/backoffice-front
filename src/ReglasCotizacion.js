@@ -1,6 +1,7 @@
 import { PAGE_UNAVAILABLE_MSG } from "./Constants";
 import { GetUserContext } from "./UserContext";
 import React, { useState, useEffect } from "react";
+import Select from "react-select";
 import {
   Box,
   Button,
@@ -25,7 +26,6 @@ import {
   ModalCloseButton,
   useDisclosure,
   Text,
-  Select,
 } from "@chakra-ui/react";
 export default function ReglasCotizacion() {
   const context = GetUserContext();
@@ -83,7 +83,26 @@ export default function ReglasCotizacion() {
         }}
       >
         <Box>
-          <FormLabel marginTop={2}>Precio Base</FormLabel>
+          <Box>
+            <FormLabel fontSize={20} fontFamily={"heading"} fontWeight={"bold"}>
+              Horas en las que se cobra extra
+            </FormLabel>
+
+            <Select
+              isMulti
+              options={Array.from(Array(24).keys()).map((number) => {
+                return { value: number, label: number + ":00hs" };
+              })}
+            />
+          </Box>
+          <FormLabel
+            marginTop={2}
+            fontSize={20}
+            fontFamily={"heading"}
+            fontWeight={"bold"}
+          >
+            Precio Base
+          </FormLabel>
           <Input
             marginTop={2}
             bg="white"
@@ -91,25 +110,60 @@ export default function ReglasCotizacion() {
             type=""
             placeholder="Precio base..."
           />
-          <FormLabel marginTop={2}>Costo de duracion</FormLabel>
+          <FormLabel
+            marginTop={2}
+            fontSize={20}
+            fontFamily={"heading"}
+            fontWeight={"bold"}
+          >
+            Costo de duracion
+          </FormLabel>
           <Input
             marginTop={2}
             bg="white"
             w={"60%"}
             type=""
-            placeholder="Costo de duracion..."
+            placeholder="Costo..."
           />
-          <FormLabel marginTop={2}>Costo de distancia</FormLabel>
+          <FormLabel
+            marginTop={2}
+            fontSize={20}
+            fontFamily={"heading"}
+            fontWeight={"bold"}
+          >
+            Costo de distancia
+          </FormLabel>
           <Input
             marginTop={2}
             bg="white"
             w={"60%"}
             type=""
-            placeholder="Costo de distancia..."
+            placeholder="Costo..."
+          />
+
+          <FormLabel
+            marginTop={2}
+            fontSize={20}
+            fontFamily={"heading"}
+            fontWeight={"bold"}
+          >
+            Bonificacion por rating de pasajero
+          </FormLabel>
+          <Input
+            marginTop={2}
+            bg="white"
+            w={"60%"}
+            type=""
+            placeholder="Bonificacion..."
           />
         </Box>
         <Box>
-          <FormLabel marginBottom={4}>
+          <FormLabel
+            marginBottom={4}
+            fontSize={20}
+            fontFamily={"heading"}
+            fontWeight={"bold"}
+          >
             Dias de la semana en los que se cobra extra
           </FormLabel>
           <FormControl display="column" alignItems="center">
@@ -121,7 +175,12 @@ export default function ReglasCotizacion() {
                     {day}
                   </FormLabel>
                   <Switch
-                    color="teal"
+                    colorScheme="whatsapp"
+                    sx={{
+                      "span.chakra-switch__track:not([data-checked])": {
+                        backgroundColor: "#697689",
+                      },
+                    }}
                     onChange={() => {
                       setValue(!value);
                     }}
@@ -130,9 +189,11 @@ export default function ReglasCotizacion() {
               );
             })}
           </FormControl>
-        </Box>
-        <Box>
-          <FormLabel>Horas en las que se cobra extra</FormLabel>
+          <Box alignContent={"flex-end"}>
+            <Button backgroundColor={"#1273de"} marginTop={2}>
+              Actualizar reglas
+            </Button>
+          </Box>
         </Box>
       </Box>
     </>

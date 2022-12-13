@@ -28,7 +28,7 @@ export default function Navbar() {
           gap: 4,
         }}
       >
-        <CustomLink style={navbarItem} to="/home">Home</CustomLink>
+        <CustomLink style={navbarItem} to="/usuarios">Usuarios</CustomLink>
         <CustomLink style={navbarItem} to="/metricas">Metricas</CustomLink>
         <CustomLink style={navbarItem} to="/reglas-cotizacion">Reglas de Cotizacion</CustomLink>
       </ul>
