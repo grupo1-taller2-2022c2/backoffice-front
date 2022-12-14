@@ -7,7 +7,8 @@ import {
   METRICS_BLOCKED_EP,
   METRICS_LOGINS_EP,
   METRICS_REGISTRATIONS_EP,
-  PRICING_EP
+  PRICING_EP,
+  PRICING_MOD_EP
 } from "./Constants";
 import qs from "qs";
 import axios from "axios";
@@ -82,6 +83,12 @@ export function tryGetAmountRegisters(token, method, date) {
 
 export function tryGetCurrentPricing(token) {
   return axios.get(GATEWAY_URL + PRICING_EP, {
+    headers: { Authorization: "Bearer " + token },
+  });
+}
+
+export function tryModifyPricingRules(token, rules) {
+  return axios.patch(GATEWAY_URL + PRICING_MOD_EP, rules, {
     headers: { Authorization: "Bearer " + token },
   });
 }

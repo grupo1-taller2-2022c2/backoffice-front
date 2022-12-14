@@ -2,7 +2,8 @@ import { PAGE_UNAVAILABLE_MSG } from "./Constants";
 import { GetUserContext } from "./UserContext";
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import { tryGetCurrentPricing } from "./Backend";
+import { tryGetCurrentPricing, tryModifyPricingRules } from "./Backend";
+
 import {
   Box,
   Button,
@@ -28,6 +29,34 @@ import {
   useDisclosure,
   Text,
 } from "@chakra-ui/react";
+
+function translateDay(dayNumber) {
+  let result = "";
+  switch (dayNumber) {
+    case 0:
+      result = "Monday";
+      break;
+    case 1:
+      result = "Tuesday";
+      break;
+    case 2:
+      result = "Wednesday"
+      break;
+    case 3:
+      result = "Thursday";
+      break;
+    case 4:
+      result = "Friday";
+      break;
+    case 5:
+      result = "Saturday";
+      break;
+    case 6:
+      result = "Sunday";
+      break;
+  }
+  return result
+}
 export default function ReglasCotizacion() {
   const context = GetUserContext();
   const [lunes, setLunes] = useState(false);
@@ -38,23 +67,45 @@ export default function ReglasCotizacion() {
   const [sabado, setSabado] = useState(false);
   const [domingo, setDomingo] = useState(false);
 
+  const [base, setBase] = useState(false);
+  const [busyHours, setBusyHours] = useState(false);
+  const [busyDays, setBusyDays] = useState(false);
+  const [busyHoursCost, setBusyHoursCost] = useState(false);
+  const [busyDaysCost, setBusyDaysCost] = useState(false);
+  const [durationCost, setDurationCost] = useState(false);
+  const [distanceCost, setDistanceCost] = useState(false);
+  const [ratingDiscount, setRatingDiscount] = useState(false);
+
   let days = {
-    Lunes: [lunes, setLunes],
-    Martes: [martes, setMartes],
-    Miercoles: [miercoles, setMiercoles],
-    Jueves: [jueves, setJueves],
-    Viernes: [viernes, setViernes],
-    Sabado: [sabado, setSabado],
-    Domingo: [domingo, setDomingo],
+    Monday: [lunes, setLunes],
+    Tuesday: [martes, setMartes],
+    Wednesday: [miercoles, setMiercoles],
+    Thursday: [jueves, setJueves],
+    Friday: [viernes, setViernes],
+    Saturday: [sabado, setSabado],
+    Sunday: [domingo, setDomingo],
   };
 
+  let fields = [
+    base,
+    busyHours,
+    busyHoursCost,
+    busyDays,
+    busyDaysCost,
+    distanceCost,
+    durationCost,
+    ratingDiscount,
+  ];
   useEffect(() => {
+    let newList = [];
     for (let day in days) {
-      if (days[day][0]) console.log(day + "Activado");
+      if (days[day][0]) {
+        newList.push(day);
+      }
     }
-    console.log("--------------------");
+    setBusyDays(newList);
+    console.log(newList);
   }, [lunes, martes, miercoles, jueves, viernes, sabado, domingo]);
-
   if (!context.userStatus.isLoggedIn) {
     return <h2>{PAGE_UNAVAILABLE_MSG}</h2>;
   }
@@ -90,6 +141,10 @@ export default function ReglasCotizacion() {
 
             <Select
               isMulti
+              onChange={(valores) => {
+                console.log(valores);
+                setBusyHours(valores.map((valor) => valor.value));
+              }}
               options={Array.from(Array(24).keys()).map((number) => {
                 return { value: number, label: number + ":00hs" };
               })}
@@ -101,7 +156,7 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Precio Base
+            Precio Base*
           </FormLabel>
           <Input
             marginTop={2}
@@ -109,6 +164,10 @@ export default function ReglasCotizacion() {
             w={"60%"}
             type=""
             placeholder="Precio base..."
+            onChange={(e) => {
+              console.log(e.target.value);
+              setBase(e.target.value);
+            }}
           />
           <FormLabel
             marginTop={2}
@@ -116,7 +175,7 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Costo de duracion
+            Costo de duracion*
           </FormLabel>
           <Input
             marginTop={2}
@@ -124,6 +183,10 @@ export default function ReglasCotizacion() {
             w={"60%"}
             type=""
             placeholder="Costo..."
+            onChange={(e) => {
+              console.log(e.target.value);
+              setDurationCost(e.target.value);
+            }}
           />
           <FormLabel
             marginTop={2}
@@ -131,7 +194,7 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Costo de distancia
+            Costo de distancia*
           </FormLabel>
           <Input
             marginTop={2}
@@ -139,6 +202,10 @@ export default function ReglasCotizacion() {
             w={"60%"}
             type=""
             placeholder="Costo..."
+            onChange={(e) => {
+              console.log(e.target.value);
+              setDistanceCost(e.target.value);
+            }}
           />
 
           <FormLabel
@@ -147,22 +214,65 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Bonificacion por rating de pasajero
+            Descuento por rating de pasajero*
           </FormLabel>
           <Input
             marginTop={2}
             bg="white"
             w={"60%"}
             type=""
-            placeholder="Bonificacion..."
+            placeholder="Descuento..."
+            onChange={(e) => {
+              console.log(e.target.value);
+              setRatingDiscount(e.target.value);
+            }}
+          />
+          <FormLabel
+            marginTop={2}
+            fontSize={20}
+            fontFamily={"heading"}
+            fontWeight={"bold"}
+          >
+            Costo extra horas especiales*
+          </FormLabel>
+          <Input
+            marginTop={2}
+            bg="white"
+            w={"60%"}
+            type=""
+            placeholder="Costo..."
+            onChange={(e) => {
+              console.log(e.target.value);
+              setBusyHoursCost(e.target.value);
+            }}
           />
         </Box>
         <Box>
+          <FormLabel
+            marginTop={2}
+            fontSize={20}
+            fontFamily={"heading"}
+            fontWeight={"bold"}
+          >
+            Costo extra dias especiales*
+          </FormLabel>
+          <Input
+            marginTop={2}
+            bg="white"
+            w={"60%"}
+            type=""
+            placeholder="Costo..."
+            onChange={(e) => {
+              console.log(e.target.value);
+              setBusyDaysCost(e.target.value);
+            }}
+          />
           <FormLabel
             marginBottom={4}
             fontSize={20}
             fontFamily={"heading"}
             fontWeight={"bold"}
+            marginTop={5}
           >
             Dias de la semana en los que se cobra extra
           </FormLabel>
@@ -190,7 +300,45 @@ export default function ReglasCotizacion() {
             })}
           </FormControl>
           <Box alignContent={"flex-end"}>
-            <Button backgroundColor={"#1273de"} marginTop={2}>
+            <Button
+              onClick={async () => {
+                if (fields.some((field) => !field)) {
+                  alert("Complete todos los campos antes de actualizar");
+                  return;
+                }
+                try {
+                  let token = context.token.value();
+                  console.log(busyDays);
+                  let rules = {
+                    base: base,
+                    distance: distanceCost,
+                    duration: durationCost,
+                    days_of_week: busyDays,
+                    busy_hours: busyHours,
+                    busy_hours_extra: busyHoursCost,
+                    week_day_extra: busyDaysCost,
+                    passenger_rating: ratingDiscount,
+                  };
+                  let response = await tryModifyPricingRules(token, rules);
+                } catch (e) {
+                  console.log(e);
+                  alert("Error al actualizar las reglas");
+                  return;
+                }
+                alert(`Valores nuevos: 
+                  Base: ${base} 
+                  Busy Hours: ${busyHours}
+                  Busy Hours extra charge: ${busyHoursCost}
+                  Special days of week: ${busyDays}
+                  Special days extra charge: ${busyDaysCost}
+                  Distance cost multiplier: ${distanceCost}
+                  Duration cost multiplier: ${durationCost}
+                  Passenger rating multiplier: ${ratingDiscount}
+                  `);
+              }}
+              backgroundColor={"#1273de"}
+              marginTop={2}
+            >
               Actualizar reglas
             </Button>
             <Button
@@ -204,7 +352,7 @@ export default function ReglasCotizacion() {
                   Base: ${response.data.base} 
                   Busy Hours: ${response.data.busy_hours}
                   Busy Hours extra charge: ${response.data.busy_hours_extra}
-                  Special days of week: ${response.data.days_of_week}
+                  Special days of week: ${response.data.days_of_week.map((day) => translateDay(day))}
                   Special days extra charge: ${response.data.week_day_extra}
                   Distance cost multiplier: ${response.data.distance}
                   Duration cost multiplier: ${response.data.duration}
