@@ -24,16 +24,25 @@ export async function tryGetUsers(token) {
 
 export async function tryBlockUser(token, email) {
   var url = GATEWAY_URL + BLOCK_USER_EP + email;
-  return axios.post(url, {
-    headers: { Authorization: "Bearer " + token },
-  });
+  return axios.post(
+    url,
+    {},
+    {
+      headers: { Authorization: "Bearer " + token },
+    }
+  );
 }
+
 
 export async function tryUnblockUser(token, email) {
   var url = GATEWAY_URL + UNBLOCK_USER_EP + email;
-  return axios.post(url, {
-    headers: { Authorization: "Bearer " + token },
-  });
+  return axios.post(
+    url,
+    {},
+    {
+      headers: { Authorization: "Bearer " + token },
+    }
+  );
 }
 
 export async function trySignIn(email, password) {

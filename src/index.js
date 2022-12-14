@@ -12,6 +12,7 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(<>
   <Helmet>
   <style>{'body { background-color: #CFD8DC; }'}</style>
+  <title>FI-UBER Admin</title>
     </Helmet>
   <React.StrictMode>
     <BrowserRouter>

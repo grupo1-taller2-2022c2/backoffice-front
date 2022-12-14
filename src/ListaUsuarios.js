@@ -204,8 +204,8 @@ export default function ListaUsuarios() {
                     <Th>Email</Th>
                     <Th>Nombre</Th>
                     <Th>Apellido</Th>
-                    <Th>Bloqueado</Th>
                     <Th>Chofer</Th>
+                    <Th>Bloqueado</Th>
                     <Th isNumeric>Visualizar</Th>
                   </Tr>
                 </Thead>
@@ -215,8 +215,8 @@ export default function ListaUsuarios() {
                       <Td>{usuario.email}</Td>
                       <Td>{usuario.username}</Td>
                       <Td>{usuario.surname}</Td>
-                      <Td>{usuario.blocked ? "Si" : "No"}</Td>
                       <Td>{usuario.driver ? "Si" : "No"}</Td>
+                      <Td>{usuario.blocked ? "Si" : "No"}</Td>
 
                       <Th isNumeric>
                         <IconButton
@@ -316,14 +316,18 @@ export default function ListaUsuarios() {
                       {balance ? balance + " ETH" : "Cargando..."}
                     </Text>
                     <Text>Balance del usuario: IN PROGRESS</Text>
-                    <FormLabel marginTop={3} fontWeight={"bold"}>Cantidad a cargar</FormLabel>
+                    <FormLabel marginTop={3} fontWeight={"bold"}>
+                      Cantidad a cargar
+                    </FormLabel>
                     <Input
                       marginTop={1}
                       bg="white"
                       w={"60%"}
                       type=""
                       placeholder="ETH..."
-                      onChange={(e) => {console.log(parseFloat(e.target.value))}}
+                      onChange={(e) => {
+                        console.log(parseFloat(e.target.value));
+                      }}
                     />
                   </>
                 ) : null}

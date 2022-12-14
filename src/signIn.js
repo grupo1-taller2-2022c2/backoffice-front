@@ -3,7 +3,14 @@ import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { GetUserContext } from "./UserContext";
 import { trySignIn } from "./Backend";
-
+import {
+  Box,
+  Center,
+  Button,
+  FormLabel,
+  Input,
+  Text
+} from "@chakra-ui/react";
 function SignInForm() {
   const navigate = useNavigate();
   const context = GetUserContext();
@@ -12,15 +19,16 @@ function SignInForm() {
 
   useEffect(() => {
     context.atSignIn.set(true);
-    context.userStatus.logOut()
+    context.userStatus.logOut();
   }, []);
 
-  async function handleSubmit(event, navigate) {
-    event.preventDefault();
+  async function handleSubmit() {
     try {
+      console.log("Logging in with email: " + email + " and password: " + password);
       let response = await trySignIn(email, password);
       let token_data = response.data["access_token"];
       context.userStatus.logIn(token_data);
+      console.log(token_data)
     } catch (error) {
       console.log("Did not get response at Admin Sign In");
       console.log(error);
@@ -28,7 +36,7 @@ function SignInForm() {
       return;
     }
     navigate("../usuarios");
-    context.atSignIn.set(false)
+    context.atSignIn.set(false);
   }
 
   function handleEmailChange(event) {
@@ -39,35 +47,32 @@ function SignInForm() {
     onChangePassword(event.target.value);
   }
 
-  return (
-    <form
-      onSubmit={(e) => {
-        context.atSignIn.set(false);
-        handleSubmit(e, navigate);
-      }}
-    >
+  return (<form>
       <div style={centered_style}>
-        <input
+        <Input
           placeholder="E-mail"
           type="text"
           name="email"
+          bg="white"
           value={email}
           onChange={handleEmailChange}
         />
       </div>
       <div style={centered_style}>
-        <input
+        <Input
           placeholder="Password"
           type="password"
           name="password"
+          bg="white"
           value={password}
           onChange={handlePasswordChange}
+          marginBottom={5}
         />
       </div>
       <div style={centered_style}>
-        <button type="submit">Sign in</button>
+        <Button onClick={handleSubmit}>Sign in</Button>
       </div>
-    </form>
+      </form>
   );
 }
 
@@ -80,12 +85,17 @@ export default function LoginScreen() {
   }
   return (
     <>
-      <h1>FI-UBER v0.0.1 - User Administration</h1>
-      <SignInForm />
-      <div style={centered_style}>
-        <p> Go to sign up</p>
-        <button onClick={handleSignUpClick}>Sign up</button>
-      </div>
+      <Center marginTop={10}>
+        <Text fontSize={20} fontWeight="bold" marginBottom={6}>
+          FI-UBER Transport Service - User Administration
+        </Text>
+      </Center>
+      <Center>
+        <SignInForm />
+      </Center>
+      <Center marginTop={3}>
+        <Button onClick={handleSignUpClick}>Sign up</Button>
+      </Center>
     </>
   );
 }

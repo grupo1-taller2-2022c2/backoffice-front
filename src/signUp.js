@@ -2,17 +2,23 @@ import React, { useState } from "react";
 import axios from "axios";
 import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
-import {trySignUp} from "./Backend"
+import { trySignUp } from "./Backend";
+import { Box, Center, Button, FormLabel, Input, Text } from "@chakra-ui/react";
 export default function SignUpScreen() {
   const navigate = useNavigate();
   return (
     <div>
-      <h1 style={centered_style}>Please enter your data for Sign Up</h1>
-      <SignUpForm navigate={navigate} />
+      <Center>
+        <Text marginTop={10} fontSize={20} fontWeight="bold" marginBottom={6}>
+          Please enter your data for Sign Up
+        </Text>
+      </Center>
+      <Center>
+        <SignUpForm navigate={navigate} />
+      </Center>
     </div>
   );
 }
-
 
 function SignUpForm({ navigate }) {
   const [email, onChangeEmail] = useState("");
@@ -22,19 +28,24 @@ function SignUpForm({ navigate }) {
   const [surname, onChangeSurname] = useState("");
 
   async function handleSubmit(event, navigate) {
-    if (password != passwordRepeat){
-      alert("Las contraseñas no coinciden")
-      return
+    if (password != passwordRepeat) {
+      alert("Las contraseñas no coinciden");
+      return;
     }
     event.preventDefault();
     try {
-      let response = trySignUp(email, password, name, surname);
+      let response = await trySignUp(email, password, name, surname);
       console.log("Got response at Admin Sign Up!");
       alert("Se ha creado una cuenta con exito!");
+      console.log(response)
       navigate("/");
     } catch (error) {
       console.log("Did not get response at Admin Sign Up");
       console.log(error);
+      if(error.response.status == 409){
+        alert("Ya existe un usuario con ese email!")
+        return
+      }
       alert("No se pudo completar el registro");
     }
   }
@@ -66,7 +77,8 @@ function SignUpForm({ navigate }) {
       }}
     >
       <div style={centered_style}>
-        <input
+        <Input
+          bg="white"
           type="text"
           placeholder="E-mail"
           name="email"
@@ -75,7 +87,8 @@ function SignUpForm({ navigate }) {
         />
       </div>
       <div style={centered_style}>
-        <input
+        <Input
+          bg="white"
           placeholder="Password"
           type="password"
           name="password"
@@ -84,7 +97,8 @@ function SignUpForm({ navigate }) {
         />
       </div>
       <div style={centered_style}>
-        <input
+        <Input
+          bg="white"
           placeholder="Repeat password"
           type="password"
           name="repeatPassword"
@@ -93,7 +107,8 @@ function SignUpForm({ navigate }) {
         />
       </div>
       <div style={centered_style}>
-        <input
+        <Input
+          bg="white"
           placeholder="Name"
           type="text"
           name="name"
@@ -102,7 +117,8 @@ function SignUpForm({ navigate }) {
         />
       </div>
       <div style={centered_style}>
-        <input
+        <Input
+          bg="white"
           placeholder="Surname"
           type="text"
           name="surname"
@@ -111,9 +127,9 @@ function SignUpForm({ navigate }) {
         />
       </div>
       <div style={centered_style}>
-        <button type="submit" style={{ marginTop: 15 }}>
+        <Button type="submit" style={{ marginTop: 15 }}>
           Sign up
-        </button>
+        </Button>
       </div>
     </form>
   );
