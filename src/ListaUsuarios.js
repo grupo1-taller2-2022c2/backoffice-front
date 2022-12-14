@@ -3,7 +3,12 @@ import { centered_style } from "./styles";
 import { useNavigate } from "react-router-dom";
 import { GetUserContext } from "./UserContext";
 import { ViewIcon } from "@chakra-ui/icons";
-import { tryGetUsers, tryBlockUser, tryUnblockUser } from "./Backend";
+import {
+  tryGetUsers,
+  tryBlockUser,
+  tryUnblockUser,
+  tryGetSystemBalance,
+} from "./Backend";
 import { PAGE_UNAVAILABLE_MSG } from "./Constants";
 import {
   Box,
@@ -33,10 +38,17 @@ import {
 export default function ListaUsuarios() {
   const context = GetUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  let openSaldo = useDisclosure();
+  const [isOpen2, onOpen2, onClose2] = [
+    openSaldo.isOpen,
+    openSaldo.onOpen,
+    openSaldo.onClose,
+  ];
   const [usuariosTotales, setUsuariosTotales] = useState(null);
   const [usuariosVisualizados, setUsuariosVisualizados] = useState(null);
   const [usuarioSeleccionado, setUsuariosSeleccionado] = useState(null);
   const [actualizar, setActualizar] = useState(false);
+  const [balance, setBalance] = useState(false);
 
   /*async function handleListUsers() {
         try{
@@ -88,18 +100,21 @@ export default function ListaUsuarios() {
   }
 
   useEffect(() => {
-    const getUsers = async () => {
+    const getUsersAndBalance = async () => {
       try {
         let token = context.token.value();
         let response = await tryGetUsers(token);
         console.log(response.data);
         setUsuariosTotales(response.data);
         setUsuariosVisualizados(response.data);
+
+        let response2 = await tryGetSystemBalance(token);
+        setBalance(response2.data.balance);
       } catch (e) {
         console.log(e);
       }
     };
-    getUsers();
+    getUsersAndBalance();
   }, [actualizar]);
 
   async function handleBlock() {
@@ -261,7 +276,13 @@ export default function ListaUsuarios() {
                 <Button variant="ghost" mr={3} onClick={onClose}>
                   Cerrar
                 </Button>
-                <Button colorScheme="blue" margin={5}>
+                <Button
+                  colorScheme="blue"
+                  margin={5}
+                  onClick={() => {
+                    onOpen2();
+                  }}
+                >
                   Cargar Saldo
                 </Button>
                 <Button
@@ -276,6 +297,44 @@ export default function ListaUsuarios() {
                   {usuarioSeleccionado && usuarioSeleccionado.blocked
                     ? "Desbloquear"
                     : "Bloquear"}
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+
+          <Modal isOpen={isOpen2} onClose={onClose2}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Carga de Saldo</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                {usuarioSeleccionado ? (
+                  <>
+                    <Text>Carga de saldo para {usuarioSeleccionado.email}</Text>
+                    <Text>
+                      Balance disponible:{" "}
+                      {balance ? balance + " ETH" : "Cargando..."}
+                    </Text>
+                    <Text>Balance del usuario: IN PROGRESS</Text>
+                    <FormLabel marginTop={3} fontWeight={"bold"}>Cantidad a cargar</FormLabel>
+                    <Input
+                      marginTop={1}
+                      bg="white"
+                      w={"60%"}
+                      type=""
+                      placeholder="ETH..."
+                      onChange={(e) => {console.log(parseFloat(e.target.value))}}
+                    />
+                  </>
+                ) : null}
+              </ModalBody>
+              <ModalFooter>
+                {" "}
+                <Button variant="ghost" mr={3} onClick={onClose2}>
+                  Cerrar
+                </Button>
+                <Button colorScheme="blue" margin={5}>
+                  Cargar
                 </Button>
               </ModalFooter>
             </ModalContent>
