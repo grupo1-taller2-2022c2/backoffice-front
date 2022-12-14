@@ -105,3 +105,15 @@ export function tryGetSystemBalance(token) {
     headers: { Authorization: "Bearer " + token },
   });
 }
+
+export function tryGetUserBalance(token, email) {
+  return axios.get(GATEWAY_URL + USERS_EP + email + "/wallet", {
+    headers: { Authorization: "Bearer " + token },
+  });
+}
+
+export function tryDeposit(token, email, amount){
+  return axios.post(GATEWAY_URL + USERS_EP + email + "/wallet/deposit", {amount_in_ethers: amount}, {
+    headers: { Authorization: "Bearer " + token },
+  });
+}

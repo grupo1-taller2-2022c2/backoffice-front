@@ -8,6 +8,8 @@ import {
   tryBlockUser,
   tryUnblockUser,
   tryGetSystemBalance,
+  tryGetUserBalance,
+  tryDeposit,
 } from "./Backend";
 import { PAGE_UNAVAILABLE_MSG } from "./Constants";
 import {
@@ -49,6 +51,8 @@ export default function ListaUsuarios() {
   const [usuarioSeleccionado, setUsuariosSeleccionado] = useState(null);
   const [actualizar, setActualizar] = useState(false);
   const [balance, setBalance] = useState(false);
+  const [userBalance, setUserBalance] = useState(false);
+  const [balanceCharge, setBalanceCharge] = useState(false);
 
   /*async function handleListUsers() {
         try{
@@ -99,22 +103,42 @@ export default function ListaUsuarios() {
     );
   }
 
+  async function getSystemBalance() {
+    try {
+      let token = context.token.value();
+      let response = await tryGetSystemBalance(
+        token,
+        usuarioSeleccionado.email
+      );
+      setBalance(response.data.balance);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async function getUserBalance() {
+    try {
+      let token = context.token.value();
+      let response = await tryGetUserBalance(token, usuarioSeleccionado.email);
+      setUserBalance(response.data.balance);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
-    const getUsersAndBalance = async () => {
+    const getUsers = async () => {
       try {
         let token = context.token.value();
         let response = await tryGetUsers(token);
         console.log(response.data);
         setUsuariosTotales(response.data);
         setUsuariosVisualizados(response.data);
-
-        let response2 = await tryGetSystemBalance(token);
-        setBalance(response2.data.balance);
       } catch (e) {
         console.log(e);
       }
     };
-    getUsersAndBalance();
+    getUsers();
   }, [actualizar]);
 
   async function handleBlock() {
@@ -281,6 +305,8 @@ export default function ListaUsuarios() {
                   margin={5}
                   onClick={() => {
                     onOpen2();
+                    getSystemBalance();
+                    getUserBalance();
                   }}
                 >
                   Cargar Saldo
@@ -302,7 +328,14 @@ export default function ListaUsuarios() {
             </ModalContent>
           </Modal>
 
-          <Modal isOpen={isOpen2} onClose={onClose2}>
+          <Modal
+            isOpen={isOpen2}
+            onClose={() => {
+              onClose2();
+              setBalance(null);
+              setUserBalance(null);
+            }}
+          >
             <ModalOverlay />
             <ModalContent>
               <ModalHeader>Carga de Saldo</ModalHeader>
@@ -315,7 +348,10 @@ export default function ListaUsuarios() {
                       Balance disponible:{" "}
                       {balance ? balance + " ETH" : "Cargando..."}
                     </Text>
-                    <Text>Balance del usuario: IN PROGRESS</Text>
+                    <Text>
+                      Balance del usuario:{" "}
+                      {userBalance ? userBalance + " ETH" : "Cargando..."}
+                    </Text>
                     <FormLabel marginTop={3} fontWeight={"bold"}>
                       Cantidad a cargar
                     </FormLabel>
@@ -326,7 +362,7 @@ export default function ListaUsuarios() {
                       type=""
                       placeholder="ETH..."
                       onChange={(e) => {
-                        console.log(parseFloat(e.target.value));
+                        setBalanceCharge(parseFloat(e.target.value))
                       }}
                     />
                   </>
@@ -334,10 +370,44 @@ export default function ListaUsuarios() {
               </ModalBody>
               <ModalFooter>
                 {" "}
-                <Button variant="ghost" mr={3} onClick={onClose2}>
+                <Button
+                  variant="ghost"
+                  mr={3}
+                  onClick={() => {
+                    onClose2();
+                    setBalance(null);
+                    setUserBalance(null);
+                  }}
+                >
                   Cerrar
                 </Button>
-                <Button colorScheme="blue" margin={5}>
+                <Button colorScheme="blue" margin={5} onClick={async () => {
+                  if (balanceCharge > 0.2){
+                    alert("No esta permitido cargar una cantidad mayor a 0.2 ETH")
+                    return
+                  }
+
+                  if (!balanceCharge){
+                    alert("Debe ingresar una cantidad a cargar")
+                    return
+                  }
+
+                  try {
+                    let token = context.token.value()
+                    let response = tryDeposit(token, usuarioSeleccionado.email, balanceCharge)
+                  }
+                  catch(e){
+                    console.log(e)
+                    alert("No se pudo cargar el saldo")
+                    return
+                  }                  
+                  setBalance(null)
+                  setUserBalance(null)
+                  setBalanceCharge(null)
+                  onClose2()
+                  alert("Cargando: " + balanceCharge + " ETH al usuario: " + usuarioSeleccionado.email + "\n" + "El saldo puede tardar unos segundos en actualizarse")
+                  
+                }}>
                   Cargar
                 </Button>
               </ModalFooter>
