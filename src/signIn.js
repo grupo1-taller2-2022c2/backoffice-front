@@ -55,44 +55,45 @@ function SignInForm() {
     onChangePassword(event.target.value);
   }
 
-  return (<>
-    <form>
+  return (
+    <>
+      <form>
+        <div style={centered_style}>
+          <Input
+            placeholder="E-mail"
+            type="text"
+            name="email"
+            bg="white"
+            value={email}
+            onChange={handleEmailChange}
+          />
+        </div>
+        <div style={centered_style}>
+          <Input
+            placeholder="Contraseña"
+            type="password"
+            name="password"
+            bg="white"
+            value={password}
+            onChange={handlePasswordChange}
+            marginBottom={5}
+          />
+        </div>
+      </form>
       <div style={centered_style}>
-        <Input
-          placeholder="E-mail"
-          type="text"
-          name="email"
-          bg="white"
-          value={email}
-          onChange={handleEmailChange}
-        />
+        <Button
+          width={"full"}
+          onClick={handleSubmit}
+          bg={"#07A4A4"}
+          color={"white"}
+          _hover={{
+            bg: "#088989",
+          }}
+        >
+          Iniciar sesión
+        </Button>
       </div>
-      <div style={centered_style}>
-        <Input
-          placeholder="Password"
-          type="password"
-          name="password"
-          bg="white"
-          value={password}
-          onChange={handlePasswordChange}
-          marginBottom={5}
-        />
-      </div>
-     
-    </form>
-     <div style={centered_style}>
-     <Button
-     width={"full"}
-       onClick={handleSubmit}
-       bg={"#07A4A4"}
-       color={"white"}
-       _hover={{
-         bg: "#088989",
-       }}
-     >
-       Sign in
-     </Button>
-   </div></>
+    </>
   );
 }
 
@@ -112,7 +113,7 @@ export default function LoginScreen() {
             FI-UBER Transport Service
           </Heading>
           <Heading alignItems={"center"} fontSize={"3xl"}>
-            User Administration
+            Administración de Usuarios
           </Heading>
         </Stack>
         <Box rounded={"lg"} bg="white" boxShadow={"lg"} p={8}>
@@ -121,7 +122,9 @@ export default function LoginScreen() {
               <SignInForm />
             </FormControl>
             <Center marginTop={3}>
-              <Button onClick={handleSignUpClick} width={"full"} bg="gray.300" >Sign up</Button>
+              <Button onClick={handleSignUpClick} width={"full"} bg="gray.300">
+                Registrarse
+              </Button>
             </Center>
           </Stack>
         </Box>
@@ -130,17 +133,18 @@ export default function LoginScreen() {
   );
 }
 
-function CardCover({children}){
-  return(<>
-    <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"#CFD8DC"}>
-    <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-    <Stack align={"center"}>
-          <Heading alignItems={"center"} fontSize={"4xl"}>
-            FI-UBER Transport Service
-          </Heading>
+function CardCover({ children }) {
+  return (
+    <>
+      <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"#CFD8DC"}>
+        <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+          <Stack align={"center"}>
+            <Heading alignItems={"center"} fontSize={"4xl"}>
+              FI-UBER Transport Service
+            </Heading>
+          </Stack>
         </Stack>
-    </Stack>
-    </Flex>
-  </>)
-
+      </Flex>
+    </>
+  );
 }

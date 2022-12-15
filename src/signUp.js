@@ -23,10 +23,10 @@ export default function SignUpScreen() {
         <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
           <Stack align={"center"}>
             <Heading alignItems={"center"} fontSize={"3xl"}>
-              Administrator Sign Up
+              Registro de Administrador
             </Heading>
             <Heading alignItems={"center"} fontSize={"2xl"}>
-              Please enter your credentials
+              Por favor ingrese sus datos
             </Heading>
           </Stack>
           <Box rounded={"lg"} bg="white" boxShadow={"lg"} p={8}>
@@ -111,7 +111,7 @@ function SignUpForm({ navigate }) {
       <div style={centered_style}>
         <Input
           bg="white"
-          placeholder="Password"
+          placeholder="Contraseña"
           type="password"
           name="password"
           value={password}
@@ -121,7 +121,7 @@ function SignUpForm({ navigate }) {
       <div style={centered_style}>
         <Input
           bg="white"
-          placeholder="Repeat password"
+          placeholder="Repetir contraseña"
           type="password"
           name="repeatPassword"
           value={passwordRepeat}
@@ -131,7 +131,7 @@ function SignUpForm({ navigate }) {
       <div style={centered_style}>
         <Input
           bg="white"
-          placeholder="Name"
+          placeholder="Nombre"
           type="text"
           name="name"
           value={name}
@@ -141,7 +141,7 @@ function SignUpForm({ navigate }) {
       <div style={centered_style}>
         <Input
           bg="white"
-          placeholder="Surname"
+          placeholder="Apellido"
           type="text"
           name="surname"
           value={surname}
@@ -159,7 +159,7 @@ function SignUpForm({ navigate }) {
             bg: "#088989",
           }}
         >
-          Sign up
+          Registrarse
         </Button>
       </div>
     </form>

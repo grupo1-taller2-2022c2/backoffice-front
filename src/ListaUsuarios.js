@@ -14,7 +14,7 @@ import {
   tryDeposit,
 } from "./Backend";
 import { PAGE_UNAVAILABLE_MSG } from "./Constants";
-import {myBackgroundColor} from "./styles"
+import { myBackgroundColor } from "./styles";
 import {
   Center,
   Box,
@@ -303,11 +303,14 @@ export default function ListaUsuarios() {
             flexDirection={"column"}
             gap={4}
           >
-            <TableContainer rounded={"lg"}
-        bg="gray.100"
-        boxShadow={"lg"}
-        p={8} marginLeft={5}>
-              <Table variant="simple">
+            <TableContainer
+              rounded={"lg"}
+              bg="gray.100"
+              boxShadow={"lg"}
+              p={8}
+              marginLeft={5}
+            >
+              <Table variant="simple" colorScheme={"blackAlpha"} >
                 <Thead>
                   <Tr>
                     <Th>Email</Th>

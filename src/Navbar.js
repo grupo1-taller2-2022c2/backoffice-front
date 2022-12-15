@@ -32,7 +32,7 @@ export default function Navbar() {
         <CustomLink style={navbarItem} to="/reglas-cotizacion">Reglas de Cotizacion</CustomLink>
       </ul>
       <ul style={{listStyle: "none"}}>
-        <CustomLink style={navbarItem} to="/">Log out</CustomLink>
+        <CustomLink style={navbarItem} to="/">Salir</CustomLink>
       </ul>
     </nav>
   );
