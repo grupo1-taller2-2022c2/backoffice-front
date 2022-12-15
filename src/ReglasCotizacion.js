@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { tryGetCurrentPricing, tryModifyPricingRules } from "./Backend";
 import makeAnimated from "react-select/animated";
-import {myBackgroundColor} from "./styles"
+import { myBackgroundColor } from "./styles";
 import {
   Box,
   Button,
@@ -115,14 +115,16 @@ export default function ReglasCotizacion() {
   return (
     <>
       <Box
+        rounded={"lg"}
+        bg="gray.100"
+        boxShadow={"lg"}
+        p={8}
         justifyContent={"space-evenly"}
         alignItems={"center"}
         display={"flex"}
         overflowY="auto"
         m="10"
         maxH="full"
-        rounded="sm"
-        bg={myBackgroundColor}
         css={{
           "&::-webkit-scrollbar": {
             width: "4px",

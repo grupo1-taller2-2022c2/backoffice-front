@@ -303,7 +303,10 @@ export default function ListaUsuarios() {
             flexDirection={"column"}
             gap={4}
           >
-            <TableContainer marginLeft={5}>
+            <TableContainer rounded={"lg"}
+        bg="gray.100"
+        boxShadow={"lg"}
+        p={8} marginLeft={5}>
               <Table variant="simple">
                 <Thead>
                   <Tr>

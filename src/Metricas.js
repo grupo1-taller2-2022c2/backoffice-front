@@ -197,7 +197,7 @@ export default function Metricas() {
             margin={5}
             className="registrations"
             rounded={"lg"}
-            bg="white"
+            bg="gray.100"
             boxShadow={"lg"}
             p={8}
           >
@@ -231,7 +231,7 @@ export default function Metricas() {
             margin={5}
             className="logins"
             rounded={"lg"}
-            bg="white"
+            bg="gray.100"
             boxShadow={"lg"}
             p={8}
           >
@@ -267,7 +267,7 @@ export default function Metricas() {
           margin={5}
           className="blocked"
           rounded={"lg"}
-          bg="white"
+          bg="gray.100"
           boxShadow={"lg"}
           p={8}
           width={"-moz-fit-content"}
