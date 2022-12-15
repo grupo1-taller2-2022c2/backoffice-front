@@ -1,4 +1,4 @@
-export const GATEWAY_URL = "http://localhost:3006"
+export const GATEWAY_URL = "https://fi-uber-api-gateway-backoffice.herokuapp.com"
 export const ACCESS_EP = "/token"
 export const USERS_EP = "/users/"
 export const BLOCK_USER_EP = "/users/blocked/"
