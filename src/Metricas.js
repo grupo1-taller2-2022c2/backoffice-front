@@ -2,7 +2,7 @@ import { GATEWAY_URL, PAGE_UNAVAILABLE_MSG } from "./Constants";
 import { GetUserContext } from "./UserContext";
 import React, { useState, useEffect } from "react";
 import { Spinner } from "@chakra-ui/react";
-
+import {myBackgroundColor} from "./styles"
 import {
   Box,
   Button,
@@ -122,7 +122,7 @@ export default function Metricas() {
         m="10"
         maxH="full"
         rounded="sm"
-        bg="gray.300"
+        bg={myBackgroundColor}
         css={{
           "&::-webkit-scrollbar": {
             width: "4px",

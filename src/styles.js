@@ -17,3 +17,5 @@ export const navbarItem = {
   marginRight: 20,
   marginLeft: 5,
 };
+
+export const myBackgroundColor = "#CFD8DC"

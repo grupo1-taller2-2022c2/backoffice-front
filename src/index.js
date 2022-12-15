@@ -6,12 +6,12 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import {App} from "./App"
 import {Helmet} from 'react-helmet';
-
+import {myBackgroundColor} from "./styles"
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
 root.render(<>
   <Helmet>
-  <style>{'body { background-color: #CFD8DC }'}</style>
+  <style>{`body { background-color: ${myBackgroundColor} }`}</style>
   <title>FI-UBER Admin</title>
     </Helmet>
   <React.StrictMode>

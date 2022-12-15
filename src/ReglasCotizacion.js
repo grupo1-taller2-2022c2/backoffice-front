@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { tryGetCurrentPricing, tryModifyPricingRules } from "./Backend";
 import makeAnimated from "react-select/animated";
-
+import {myBackgroundColor} from "./styles"
 import {
   Box,
   Button,
@@ -122,7 +122,7 @@ export default function ReglasCotizacion() {
         m="10"
         maxH="full"
         rounded="sm"
-        bg="gray.300"
+        bg={myBackgroundColor}
         css={{
           "&::-webkit-scrollbar": {
             width: "4px",

@@ -14,6 +14,7 @@ import {
   tryDeposit,
 } from "./Backend";
 import { PAGE_UNAVAILABLE_MSG } from "./Constants";
+import {myBackgroundColor} from "./styles"
 import {
   Center,
   Box,
@@ -250,7 +251,7 @@ export default function ListaUsuarios() {
           m="10"
           maxH="full"
           rounded="sm"
-          bg="gray.300"
+          bg={myBackgroundColor}
           css={{
             "&::-webkit-scrollbar": {
               width: "4px",
