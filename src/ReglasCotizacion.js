@@ -239,7 +239,7 @@ export default function ReglasCotizacion() {
             Precio Base *
           </FormLabel>
           <Input
-            value={base}
+            value={base ? (base) : ""}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -259,7 +259,7 @@ export default function ReglasCotizacion() {
             Costo de duracion *
           </FormLabel>
           <Input
-            value={durationCost}
+            value={durationCost ? (durationCost) : ""}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -279,7 +279,7 @@ export default function ReglasCotizacion() {
             Costo de distancia *
           </FormLabel>
           <Input
-            value={distanceCost}
+            value={distanceCost ? (distanceCost) : ""}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -300,7 +300,7 @@ export default function ReglasCotizacion() {
             Descuento por rating de pasajero *
           </FormLabel>
           <Input
-            value={ratingDiscount}
+            value={ratingDiscount ? (ratingDiscount) : ""}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -320,7 +320,7 @@ export default function ReglasCotizacion() {
             Costo extra horas especiales *
           </FormLabel>
           <Input
-            value={busyHoursCost}
+            value={busyHoursCost ? (busyHoursCost) : ""}
             bg="white"
             borderColor={"black"}
             w={"60%"}
@@ -337,7 +337,7 @@ export default function ReglasCotizacion() {
             Costo extra dias especiales *
           </FormLabel>
           <Input
-            value={busyDaysCost}
+            value={busyDaysCost ? (busyDaysCost) : ""}
             borderColor={"black"}
             bg="white"
             w={"60%"}
