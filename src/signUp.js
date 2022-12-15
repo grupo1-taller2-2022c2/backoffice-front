@@ -153,10 +153,10 @@ function SignUpForm({ navigate }) {
           type="submit"
           style={{ marginTop: 15 }}
           width={"full"}
-          bg={"blue.400"}
+          bg={"#07A4A4"}
           color={"white"}
           _hover={{
-            bg: "blue.500",
+            bg: "#088989",
           }}
         >
           Sign up

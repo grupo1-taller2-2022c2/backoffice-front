@@ -11,7 +11,7 @@ const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
 root.render(<>
   <Helmet>
-  <style>{'body { background-color: #CFD8DC; }'}</style>
+  <style>{'body { background-color: #CFD8DC }'}</style>
   <title>FI-UBER Admin</title>
     </Helmet>
   <React.StrictMode>

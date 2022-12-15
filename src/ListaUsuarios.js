@@ -41,7 +41,7 @@ import {
 } from "@chakra-ui/react";
 
 function ThickDivider() {
-  return <Divider borderBottomWidth={"thin"} borderColor={"teal"} />;
+  return <Divider borderBottomWidth={"thin"} borderColor={"#07A4A4"} />;
 }
 
 export default function ListaUsuarios() {
@@ -389,11 +389,17 @@ export default function ListaUsuarios() {
                   Cerrar
                 </Button>
                 <Button
-                  colorScheme="teal"
+                  bg={"#07A4A4"}
+                  color={"white"}
+                  _hover={{
+                    bg: "#088989",
+                  }}
                   margin={5}
                   onClick={() => {
-                    if(usuarioSeleccionado.blocked){
-                      alert("El usuario esta bloqueado, desbloqueelo para cargarle saldo");
+                    if (usuarioSeleccionado.blocked) {
+                      alert(
+                        "El usuario esta bloqueado, desbloqueelo para cargarle saldo"
+                      );
                       return;
                     }
                     onOpen2();
@@ -404,7 +410,11 @@ export default function ListaUsuarios() {
                   Cargar Saldo
                 </Button>
                 <Button
-                  colorScheme="teal"
+                  bg={"#07A4A4"}
+                  color={"white"}
+                  _hover={{
+                    bg: "#088989",
+                  }}
                   onClick={async () => {
                     usuarioSeleccionado && usuarioSeleccionado.blocked
                       ? handleUnblock()
@@ -485,7 +495,11 @@ export default function ListaUsuarios() {
                   Cerrar
                 </Button>
                 <Button
-                  colorScheme="teal"
+                  bg={"#07A4A4"}
+                  color={"white"}
+                  _hover={{
+                    bg: "#088989",
+                  }}
                   margin={5}
                   onClick={async () => {
                     if (balanceCharge > 0.2) {

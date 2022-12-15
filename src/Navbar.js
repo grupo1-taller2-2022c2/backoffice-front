@@ -2,7 +2,6 @@ import { Link, useMatch, useResolvedPath } from "react-router-dom";
 import {Button} from "@chakra-ui/react"
 import {navbarItem} from "./styles"
 import { GetUserContext } from "./UserContext"
-
 export default function Navbar() {
   const context = GetUserContext()
 
@@ -10,13 +9,13 @@ export default function Navbar() {
     <nav
       className="nav"
       style={{
-        backgroundColor: "teal",
+        backgroundColor: "#07A4A4",
         color: "white",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "stretch",
         gap: 2,
-        padding: 5,
+        padding: 7,
       }}
     >
       <ul

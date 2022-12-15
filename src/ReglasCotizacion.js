@@ -147,9 +147,10 @@ export default function ReglasCotizacion() {
               styles={{
                 control: (baseStyles, state) => ({
                   ...baseStyles,
-                  borderColor: 'black',
+                  borderColor: "black",
                   boxShadow: "none",
-                })}}
+                }),
+              }}
               components={animatedComponents}
               placeholder="Horas..."
               onChange={(valores) => {
@@ -353,8 +354,12 @@ export default function ReglasCotizacion() {
                   Passenger rating multiplier: ${ratingDiscount}
                   `);
               }}
-              backgroundColor={"#1273de"}
-              marginTop={2}
+              bg={"#07A4A4"}
+              color={"white"}
+              _hover={{
+                bg: "#088989",
+              }}
+              marginTop={4}
             >
               Actualizar reglas
             </Button>
@@ -381,8 +386,12 @@ export default function ReglasCotizacion() {
                   console.log(e);
                 }
               }}
-              backgroundColor={"#1273de"}
-              marginTop={2}
+              bg={"#07A4A4"}
+              color={"white"}
+              _hover={{
+                bg: "#088989",
+              }}
+              marginTop={4}
             >
               Ver reglas
             </Button>
