@@ -89,7 +89,7 @@ export default function ReglasCotizacion() {
 
   let fields = [
     base,
-    busyHours,
+    //busyHours,
     busyHoursCost,
     busyDays,
     busyDaysCost,

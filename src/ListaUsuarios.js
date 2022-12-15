@@ -220,6 +220,7 @@ export default function ListaUsuarios() {
       return;
     }
     usuarioSeleccionado.blocked = true;
+    setActualizarFiltro(!actualizarFiltro);
     alert("Exito: Usuario bloqueado");
   }
 
@@ -234,6 +235,7 @@ export default function ListaUsuarios() {
       return;
     }
     usuarioSeleccionado.blocked = false;
+    setActualizarFiltro(!actualizarFiltro);
     alert("Exito: Usuario desbloqueado");
   }
 

@@ -9,7 +9,13 @@ import {
   Button,
   FormLabel,
   Input,
-  Text
+  Text,
+  useColorModeValue,
+  Flex,
+  Stack,
+  Heading,
+  FormControl,
+  InputGroup,
 } from "@chakra-ui/react";
 function SignInForm() {
   const navigate = useNavigate();
@@ -24,11 +30,13 @@ function SignInForm() {
 
   async function handleSubmit() {
     try {
-      console.log("Logging in with email: " + email + " and password: " + password);
+      console.log(
+        "Logging in with email: " + email + " and password: " + password
+      );
       let response = await trySignIn(email, password);
       let token_data = response.data["access_token"];
       context.userStatus.logIn(token_data);
-      console.log(token_data)
+      console.log(token_data);
     } catch (error) {
       console.log("Did not get response at Admin Sign In");
       console.log(error);
@@ -47,7 +55,8 @@ function SignInForm() {
     onChangePassword(event.target.value);
   }
 
-  return (<form>
+  return (<>
+    <form>
       <div style={centered_style}>
         <Input
           placeholder="E-mail"
@@ -69,10 +78,21 @@ function SignInForm() {
           marginBottom={5}
         />
       </div>
-      <div style={centered_style}>
-        <Button onClick={handleSubmit}>Sign in</Button>
-      </div>
-      </form>
+     
+    </form>
+     <div style={centered_style}>
+     <Button
+     width={"full"}
+       onClick={handleSubmit}
+       bg={"blue.400"}
+       color={"white"}
+       _hover={{
+         bg: "blue.500",
+       }}
+     >
+       Sign in
+     </Button>
+   </div></>
   );
 }
 
@@ -83,19 +103,29 @@ export default function LoginScreen() {
   function handleSignUpClick() {
     navigate("/signup");
   }
+
   return (
-    <>
-      <Center marginTop={10}>
-        <Text fontSize={20} fontWeight="bold" marginBottom={6}>
-          FI-UBER Transport Service - User Administration
-        </Text>
-      </Center>
-      <Center>
-        <SignInForm />
-      </Center>
-      <Center marginTop={3}>
-        <Button onClick={handleSignUpClick}>Sign up</Button>
-      </Center>
-    </>
+    <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"#CFD8DC"}>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Heading alignItems={"center"} fontSize={"4xl"}>
+            FI-UBER Transport Service
+          </Heading>
+          <Heading alignItems={"center"} fontSize={"3xl"}>
+            User Administration
+          </Heading>
+        </Stack>
+        <Box rounded={"lg"} bg="white" boxShadow={"lg"} p={8}>
+          <Stack spacing={4}>
+            <FormControl>
+              <SignInForm />
+            </FormControl>
+            <Center marginTop={3}>
+              <Button onClick={handleSignUpClick} width={"full"} bg="gray.300" >Sign up</Button>
+            </Center>
+          </Stack>
+        </Box>
+      </Stack>
+    </Flex>
   );
 }
