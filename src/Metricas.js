@@ -224,7 +224,7 @@ export default function Metricas() {
             <Stat marginTop={5}>
               <StatLabel fontSize={"md"}>Cantidad</StatLabel>
               <StatNumber>{cantidadRegistros}</StatNumber>
-              <StatHelpText>{fechaRegistro} | Actualidad</StatHelpText>
+              <StatHelpText>{fechaRegistro ? (fechaRegistro + " | Actualidad"): ("Sin datos")}</StatHelpText>
             </Stat>
           </Box>
           <Box
@@ -257,7 +257,7 @@ export default function Metricas() {
             <Stat marginTop={5}>
               <StatLabel fontSize={"md"}>Cantidad</StatLabel>
               <StatNumber>{cantidadLogins}</StatNumber>
-              <StatHelpText>{fechaLogin} | Actualidad</StatHelpText>
+              <StatHelpText>{fechaLogin ? (fechaLogin + " | Actualidad"): ("Sin datos")}</StatHelpText>
             </Stat>
           </Box>
           

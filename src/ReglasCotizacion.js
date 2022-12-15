@@ -31,6 +31,34 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+function translateToSpanish(day) {
+  let result = "";
+  switch (day) {
+    case "Monday":
+      result = "Lunes";
+      break;
+    case "Tuesday":
+      result = "Martes";
+      break;
+    case "Wednesday":
+      result = "Miércoles";
+      break;
+    case "Thursday":
+      result = "Jueves";
+      break;
+    case "Friday":
+      result = "Viernes";
+      break;
+    case "Saturday":
+      result = "Sábado";
+      break;
+    case "Sunday":
+      result = "Domingo";
+      break;
+  }
+  return result;
+}
+
 function translateDay(dayNumber) {
   let result = "";
   switch (dayNumber) {
@@ -118,12 +146,11 @@ export default function ReglasCotizacion() {
         rounded={"lg"}
         bg="gray.100"
         boxShadow={"lg"}
-        p={8}
+        p={6}
         justifyContent={"space-evenly"}
-        alignItems={"center"}
         display={"flex"}
         overflowY="auto"
-        m="10"
+        m="5"
         maxH="full"
         css={{
           "&::-webkit-scrollbar": {
@@ -170,10 +197,9 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Precio Base*
+            Precio Base *
           </FormLabel>
           <Input
-            marginTop={2}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -190,10 +216,9 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Costo de duracion*
+            Costo de duracion *
           </FormLabel>
           <Input
-            marginTop={2}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -210,10 +235,9 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Costo de distancia*
+            Costo de distancia *
           </FormLabel>
           <Input
-            marginTop={2}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -231,10 +255,9 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Descuento por rating de pasajero*
+            Descuento por rating de pasajero *
           </FormLabel>
           <Input
-            marginTop={2}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -251,10 +274,9 @@ export default function ReglasCotizacion() {
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Costo extra horas especiales*
+            Costo extra horas especiales *
           </FormLabel>
           <Input
-            marginTop={2}
             bg="white"
             borderColor={"black"}
             w={"60%"}
@@ -268,15 +290,13 @@ export default function ReglasCotizacion() {
         </Box>
         <Box>
           <FormLabel
-            marginTop={2}
             fontSize={20}
             fontFamily={"heading"}
             fontWeight={"bold"}
           >
-            Costo extra dias especiales*
+            Costo extra dias especiales *
           </FormLabel>
           <Input
-            marginTop={2}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -302,7 +322,7 @@ export default function ReglasCotizacion() {
               return (
                 <Box key={day}>
                   <FormLabel htmlFor="email-alerts" mb="0">
-                    {day}
+                    {translateToSpanish(day)}
                   </FormLabel>
                   <Switch
                     colorScheme="whatsapp"
