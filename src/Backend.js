@@ -16,7 +16,6 @@ import axios from "axios";
 
 export async function tryGetUsers(token) {
   var url = GATEWAY_URL + USERS_EP;
-  console.log("TRYING TOKEN");
   return axios.get(url, {
     headers: { Authorization: "Bearer " + token },
   });
@@ -56,7 +55,6 @@ export async function trySignIn(email, password) {
 
 export function trySignUp(email, password, name, surname) {
   var url = GATEWAY_URL + "/admins/signup";
-  console.log(url);
   var user_info = {
     email: email,
     password: password,
@@ -73,8 +71,6 @@ export function tryGetAmountBlockedUsers(token) {
 }
 
 export function tryGetAmountLogins(token, method, date) {
-  console.log(method);
-  console.log(date);
   return axios.get(GATEWAY_URL + METRICS_LOGINS_EP, {
     params: { method: method, from_date: date },
     headers: { Authorization: "Bearer " + token },

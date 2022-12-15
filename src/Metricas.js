@@ -2,12 +2,21 @@ import { GATEWAY_URL, PAGE_UNAVAILABLE_MSG } from "./Constants";
 import { GetUserContext } from "./UserContext";
 import React, { useState, useEffect } from "react";
 import { Spinner } from "@chakra-ui/react";
-import {myBackgroundColor} from "./styles"
+import { myBackgroundColor } from "./styles";
+import {
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  StatArrow,
+  StatGroup,
+} from "@chakra-ui/react";
 import {
   Box,
   Button,
   FormLabel,
   Input,
+  Center,
   Table,
   Thead,
   Tbody,
@@ -25,6 +34,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Text,
+  Heading,
   Select,
 } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
@@ -38,8 +48,8 @@ export default function Metricas() {
   const [cantidadUsuariosBloqueados, setCantidadUsuariosBloqueados] =
     useState(null);
   const context = GetUserContext();
-  const [tipoLogin, setTipoLogin] = useState("mailpassword");
-  const [tipoRegistro, setTipoRegistro] = useState("mailpassword");
+  const [tipoLogin, setTipoLogin] = useState("All");
+  const [tipoRegistro, setTipoRegistro] = useState("All");
   const [fechaRegistro, setFechaRegistro] = useState("");
   const [fechaLogin, setFechaLogin] = useState("");
   const [cantidadLogins, setCantidadLogins] = useState();
@@ -58,9 +68,34 @@ export default function Metricas() {
     getUsuariosBloqueados();
   }, []);
 
+  async function handleGetAllLogins() {
+    try {
+      let token = context.token.value();
+      let forMail = await tryGetAmountLogins(
+        token,
+        "mailpassword",
+        fechaLogin
+      );
+      let forFed = await tryGetAmountLogins(
+        token,
+        "federatedidentity",
+        fechaLogin
+      );
+      setCantidadLogins(forMail.data + forFed.data);
+    } catch (e) {
+      console.log(e);
+      setCantidadLogins(null);
+      alert("No se pudo obtener la cantidad de logins");
+    }
+  }
+
   useEffect(() => {
     const getMetricasLogins = async () => {
       if (!tipoLogin || !fechaLogin) return;
+      if (tipoLogin === "All" && fechaLogin) {
+        handleGetAllLogins();
+        return;
+      }
 
       try {
         let token = context.token.value();
@@ -73,9 +108,34 @@ export default function Metricas() {
     getMetricasLogins();
   }, [tipoLogin, fechaLogin]);
 
+  async function handleGetAllRegisters() {
+    try {
+      let token = context.token.value();
+      let forMail = await tryGetAmountRegisters(
+        token,
+        "mailpassword",
+        fechaRegistro
+      );
+      let forFed = await tryGetAmountRegisters(
+        token,
+        "federatedidentity",
+        fechaRegistro
+      );
+      setCantidadRegistros(forMail.data + forFed.data);
+    } catch (e) {
+      console.log(e);
+      setCantidadRegistros(null);
+      alert("No se pudo obtener la cantidad de registros");
+    }
+  }
+
   useEffect(() => {
     const getMetricasRegistros = async () => {
       if (!tipoRegistro || !fechaRegistro) return;
+      if (tipoRegistro === "All" && fechaRegistro) {
+        handleGetAllRegisters();
+        return;
+      }
       try {
         let token = context.token.value();
         let response = await tryGetAmountRegisters(
@@ -96,23 +156,19 @@ export default function Metricas() {
   }
   function seleccionarTipoRegistro(e) {
     const filtro = e.target.value;
-    setTipoLogin(filtro);
-    console.log(filtro);
+    setTipoRegistro(filtro);
   }
   function seleccionarFechaRegistro(e) {
     const fecha = e.target.value;
     setFechaRegistro(fecha);
-    console.log(fecha);
   }
   function seleccionarTipoLogin(e) {
     const filtro = e.target.value;
-    setTipoRegistro(filtro);
-    console.log(filtro);
+    setTipoLogin(filtro);
   }
   function seleccionarFechaLogin(e) {
     const fecha = e.target.value;
     setFechaLogin(fecha);
-    console.log(fecha);
   }
 
   return (
@@ -137,63 +193,99 @@ export default function Metricas() {
         }}
       >
         <Box className="arriba" display="flex">
-          <Box margin={5} className="registrations">
-            <FormLabel>Registros</FormLabel>
-            <Select bg="white" width="60" borderColor={"black"} onChange={seleccionarTipoRegistro} >
+          <Box
+            margin={5}
+            className="registrations"
+            rounded={"lg"}
+            bg="white"
+            boxShadow={"lg"}
+            p={8}
+          >
+            <FormLabel fontSize={20} fontWeight={"bold"} >Registros</FormLabel>
+            <Select
+              bg="white"
+              width="60"
+              borderColor={"black"}
+              onChange={seleccionarTipoRegistro}
+            >
+              <option value="All">Todos</option>
               <option value="mailpassword">Por email</option>
               <option value="federatedidentity">Por identidad federada</option>
             </Select>
-            <FormLabel marginTop={5}>Desde...</FormLabel>
+            <FormLabel fontSize={20} fontWeight={"bold"} marginTop={5}>Desde...</FormLabel>
             <Input
               borderColor={"black"}
-              marginTop={5}
               bg="white"
               w={"60%"}
               type="date"
               onChange={seleccionarFechaRegistro}
             />
 
-            <Text marginTop={5}>
-              {cantidadRegistros != null && tipoRegistro && fechaRegistro
-                ? "Cantidad: " + cantidadRegistros
-                : "Ingrese datos para ver la cantidad de registros"}{" "}
-            </Text>
+            <Stat marginTop={5}>
+              <StatLabel fontSize={"md"}>Cantidad</StatLabel>
+              <StatNumber>{cantidadRegistros}</StatNumber>
+              <StatHelpText>{fechaRegistro} | Actualidad</StatHelpText>
+            </Stat>
           </Box>
-          <Box margin={5} className="logins">
-            <FormLabel>Logins</FormLabel>
+          <Box
+            margin={5}
+            className="logins"
+            rounded={"lg"}
+            bg="white"
+            boxShadow={"lg"}
+            p={8}
+          >
+            <FormLabel fontSize={20} fontWeight={"bold"}>Logins</FormLabel>
             <Select
               bg="white"
               width="60"
               onChange={seleccionarTipoLogin}
               borderColor={"black"}
             >
+              <option value="All">Todos</option>
               <option value="mailpassword">Por email</option>
               <option value="federatedidentity">Por identidad federada</option>
             </Select>
-            <FormLabel marginTop={5}>Desde...</FormLabel>
+            <FormLabel fontSize={20} fontWeight={"bold"} marginTop={5}>Desde...</FormLabel>
             <Input
-              marginTop={5}
               bg="white"
               w={"60%"}
               type="date"
               borderColor={"black"}
               onChange={seleccionarFechaLogin}
             />
-            <Text marginTop={5}>
-              {cantidadLogins != null && tipoLogin && fechaLogin
-                ? "Cantidad: " + cantidadLogins
-                : "Ingrese datos para ver la cantidad de logins"}
-            </Text>
+            <Stat marginTop={5}>
+              <StatLabel fontSize={"md"}>Cantidad</StatLabel>
+              <StatNumber>{cantidadLogins}</StatNumber>
+              <StatHelpText>{fechaLogin} | Actualidad</StatHelpText>
+            </Stat>
           </Box>
+          
         </Box>
 
-        <Box margin={5} className="blocked">
-          
-            {cantidadUsuariosBloqueados != null
-              ? (<Text marginTop={5}> Cantidad de Usuarios Bloqueados: {cantidadUsuariosBloqueados} </Text>)
-              : (<Spinner marginTop={2} size="xs"/>)}
+        <Box
+          margin={5}
+          className="blocked"
+          rounded={"lg"}
+          bg="white"
+          boxShadow={"lg"}
+          p={8}
+          width={"-moz-fit-content"}
+        >
+          {cantidadUsuariosBloqueados != null ? (
+            <Heading size="lg" marginTop={5}>
+              {" "}
+              Cantidad de Usuarios Bloqueados: {cantidadUsuariosBloqueados}{" "}
+            </Heading>
+          ) : (
+            <Center>
+              <Spinner marginTop={2} size="xl" />
+            </Center>
+          )}
         </Box>
       </Box>
     </>
   );
 }
+
+/**/ 

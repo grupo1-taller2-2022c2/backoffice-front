@@ -129,3 +129,18 @@ export default function LoginScreen() {
     </Flex>
   );
 }
+
+function CardCover({children}){
+  return(<>
+    <Flex minH={"100vh"} align={"center"} justify={"center"} bg={"#CFD8DC"}>
+    <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+    <Stack align={"center"}>
+          <Heading alignItems={"center"} fontSize={"4xl"}>
+            FI-UBER Transport Service
+          </Heading>
+        </Stack>
+    </Stack>
+    </Flex>
+  </>)
+
+}
