@@ -104,6 +104,37 @@ export default function ReglasCotizacion() {
   const [durationCost, setDurationCost] = useState(false);
   const [distanceCost, setDistanceCost] = useState(false);
   const [ratingDiscount, setRatingDiscount] = useState(false);
+  const [fieldsNeedUpdating, setFieldsNeedUpdating] = useState(false);
+
+  useEffect(() => {
+    updateFields();
+  }, [fieldsNeedUpdating])
+
+  function handleUpdateDaysFromNumber(dayNumber) {
+    let dayName = translateDay(dayNumber);
+    days[dayName][1](true);
+  }
+
+  const updateFields = async () => {
+    try {
+      let token = context.token.value();
+      let response = await tryGetCurrentPricing(token);
+      let info = response.data;
+      setBase(info.base);
+      setBusyHours(info.busy_hours);
+      setBusyHoursCost(info.busy_hours_extra);
+      {
+        info.days_of_week.map((day) => handleUpdateDaysFromNumber(day));
+      }
+      setBusyDaysCost(info.week_day_extra);
+      setDurationCost(info.duration);
+      setDistanceCost(info.distance);
+      setRatingDiscount(info.passenger_rating);
+    } catch (e) {
+      alert("No se pudieron obtener las reglas de cotizacion")
+      console.log(e);
+    }
+  };
 
   let days = {
     Monday: [lunes, setLunes],
@@ -136,6 +167,7 @@ export default function ReglasCotizacion() {
     console.log(newList);
   }, [lunes, martes, miercoles, jueves, viernes, sabado, domingo]);
 
+  let hourOptions = Array.from(Array(24).keys());
   const animatedComponents = makeAnimated();
   if (!context.userStatus.isLoggedIn) {
     return <h2>{PAGE_UNAVAILABLE_MSG}</h2>;
@@ -182,11 +214,18 @@ export default function ReglasCotizacion() {
               }}
               components={animatedComponents}
               placeholder="Horas..."
+              value={
+                busyHours
+                  ? busyHours.map((number) => {
+                      return { value: number, label: number + ":00hs" };
+                    })
+                  : []
+              }
               onChange={(valores) => {
                 console.log(valores);
                 setBusyHours(valores.map((valor) => valor.value));
               }}
-              options={Array.from(Array(24).keys()).map((number) => {
+              options={hourOptions.map((number) => {
                 return { value: number, label: number + ":00hs" };
               })}
             />
@@ -200,6 +239,7 @@ export default function ReglasCotizacion() {
             Precio Base *
           </FormLabel>
           <Input
+            value={base}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -219,6 +259,7 @@ export default function ReglasCotizacion() {
             Costo de duracion *
           </FormLabel>
           <Input
+            value={durationCost}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -238,6 +279,7 @@ export default function ReglasCotizacion() {
             Costo de distancia *
           </FormLabel>
           <Input
+            value={distanceCost}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -258,6 +300,7 @@ export default function ReglasCotizacion() {
             Descuento por rating de pasajero *
           </FormLabel>
           <Input
+            value={ratingDiscount}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -277,6 +320,7 @@ export default function ReglasCotizacion() {
             Costo extra horas especiales *
           </FormLabel>
           <Input
+            value={busyHoursCost}
             bg="white"
             borderColor={"black"}
             w={"60%"}
@@ -289,14 +333,11 @@ export default function ReglasCotizacion() {
           />
         </Box>
         <Box>
-          <FormLabel
-            fontSize={20}
-            fontFamily={"heading"}
-            fontWeight={"bold"}
-          >
+          <FormLabel fontSize={20} fontFamily={"heading"} fontWeight={"bold"}>
             Costo extra dias especiales *
           </FormLabel>
           <Input
+            value={busyDaysCost}
             borderColor={"black"}
             bg="white"
             w={"60%"}
@@ -325,6 +366,8 @@ export default function ReglasCotizacion() {
                     {translateToSpanish(day)}
                   </FormLabel>
                   <Switch
+                    value={value}
+                    isChecked={value}
                     colorScheme="whatsapp"
                     sx={{
                       "span.chakra-switch__track:not([data-checked])": {
@@ -365,7 +408,9 @@ export default function ReglasCotizacion() {
                   alert("Error al actualizar las reglas");
                   return;
                 }
-                alert(`Valores nuevos: 
+                setFieldsNeedUpdating(!fieldsNeedUpdating)
+                alert("Reglas actualizadas");
+                /*alert(`Valores nuevos: 
                   Base: ${base} 
                   Busy Hours: ${busyHours}
                   Busy Hours extra charge: ${busyHoursCost}
@@ -374,7 +419,7 @@ export default function ReglasCotizacion() {
                   Distance cost multiplier: ${distanceCost}
                   Duration cost multiplier: ${durationCost}
                   Passenger rating multiplier: ${ratingDiscount}
-                  `);
+                  `)*/
               }}
               bg={"#07A4A4"}
               color={"white"}
@@ -387,27 +432,7 @@ export default function ReglasCotizacion() {
             </Button>
             <Button
               marginLeft={5}
-              onClick={async () => {
-                try {
-                  let token = context.token.value();
-                  let response = await tryGetCurrentPricing(token);
-                  console.log(response.data);
-                  alert(`Valores actuales: 
-                  Base: ${response.data.base} 
-                  Busy Hours: ${response.data.busy_hours}
-                  Busy Hours extra charge: ${response.data.busy_hours_extra}
-                  Special days of week: ${response.data.days_of_week.map(
-                    (day) => translateDay(day)
-                  )}
-                  Special days extra charge: ${response.data.week_day_extra}
-                  Distance cost multiplier: ${response.data.distance}
-                  Duration cost multiplier: ${response.data.duration}
-                  Passenger rating multiplier${response.data.passenger_rating}
-                  `);
-                } catch (e) {
-                  console.log(e);
-                }
-              }}
+              onClick={updateFields}
               bg={"#07A4A4"}
               color={"white"}
               _hover={{
@@ -415,7 +440,7 @@ export default function ReglasCotizacion() {
               }}
               marginTop={4}
             >
-              Ver reglas
+              Resetear reglas
             </Button>
           </Box>
         </Box>
