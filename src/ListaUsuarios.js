@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { centered_style } from "./styles";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import { GetUserContext } from "./UserContext";
 import { ViewIcon } from "@chakra-ui/icons";
+import { Divider } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import {
   tryGetUsers,
   tryBlockUser,
@@ -13,6 +15,7 @@ import {
 } from "./Backend";
 import { PAGE_UNAVAILABLE_MSG } from "./Constants";
 import {
+  Center,
   Box,
   Button,
   FormLabel,
@@ -37,6 +40,10 @@ import {
   Select,
 } from "@chakra-ui/react";
 
+function ThickDivider() {
+  return <Divider borderBottomWidth={"thin"} borderColor={"teal"} />;
+}
+
 export default function ListaUsuarios() {
   const context = GetUserContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -54,19 +61,80 @@ export default function ListaUsuarios() {
   const [userBalance, setUserBalance] = useState(false);
   const [balanceCharge, setBalanceCharge] = useState(false);
 
-  /*async function handleListUsers() {
-        try{
-            let userToken = context.token.value
-            let response = await tryGetUsers(userToken);
-            console.log(response)
-            setUsers(response.data)
-        }
-        catch(e){
-            console.log(e)
-        }
-    }*/
+  const [filtrarBloqueados, setFiltrarBloqueados] = useState(false);
+  const [filtrarNoBloqueados, setFiltrarNoBloqueados] = useState(false);
+  const [filtrarChoferes, setFiltrarChoferes] = useState(false);
+  const [filtrarNoChoferes, setFiltrarNoChoferes] = useState(false);
+  const [actualizarFiltro, setActualizarFiltro] = useState(false);
 
-  function filtrarUsuarios(e) {
+  function checkIfBlocked(user) {
+    return filtrarBloqueados ? user.blocked : true;
+  }
+  function checkIfNotBlocked(user) {
+    return filtrarNoBloqueados ? !user.blocked : true;
+  }
+  function checkIfDriver(user) {
+    return filtrarChoferes ? user.driver != null : true;
+  }
+  function checkIfNotDriver(user) {
+    return filtrarNoChoferes ? user.driver == null : true;
+  }
+
+  useEffect(() => {
+    if (!usuariosTotales) {
+      return;
+    }
+    setUsuariosVisualizados(
+      usuariosTotales.filter((p) => {
+        return (
+          checkIfBlocked(p) &&
+          checkIfNotBlocked(p) &&
+          checkIfDriver(p) &&
+          checkIfNotDriver(p)
+        );
+      })
+    );
+  }, [actualizarFiltro]);
+
+  function filtrarPorBloqueado(e) {
+    const filtro = e.target.value;
+    if (filtro === "") {
+      setFiltrarBloqueados(false);
+      setFiltrarNoBloqueados(false);
+      setActualizarFiltro(!actualizarFiltro);
+      return;
+    }
+
+    if (filtro == "BLOQUEADOS") {
+      setFiltrarBloqueados(true);
+      setFiltrarNoBloqueados(false);
+    } else {
+      setFiltrarBloqueados(false);
+      setFiltrarNoBloqueados(true);
+    }
+    setActualizarFiltro(!actualizarFiltro);
+  }
+
+  function filtrarPorChofer(e) {
+    const filtro = e.target.value;
+    if (filtro === "") {
+      setFiltrarChoferes(false);
+      setFiltrarNoChoferes(false);
+      setActualizarFiltro(!actualizarFiltro);
+      return;
+    }
+
+    if (filtro == "CHOFERES") {
+      setFiltrarChoferes(true);
+      setFiltrarNoChoferes(false);
+    } else {
+      setFiltrarChoferes(false);
+      setFiltrarNoChoferes(true);
+    }
+    setActualizarFiltro(!actualizarFiltro);
+  }
+
+  /*function filtrarUsuariosBloqueados(e) {
     const filtro = e.target.value;
     if (filtro === "") {
       setUsuariosVisualizados(usuariosTotales);
@@ -89,7 +157,7 @@ export default function ListaUsuarios() {
             usuariosTotales.filter((p) => p.driver === null)
           );
     }
-  }
+  }*/
 
   function filtrarPorMail(e) {
     const filtro = e.target.value;
@@ -198,6 +266,7 @@ export default function ListaUsuarios() {
             <Input
               marginLeft={5}
               marginBottom={10}
+              borderColor={"black"}
               bg="white"
               w={"40%"}
               placeholder="Buscar usuario por mail..."
@@ -205,14 +274,24 @@ export default function ListaUsuarios() {
             />
             <Select
               bg="white"
-              placeholder="Todos"
-              width="60"
-              onChange={filtrarUsuarios}
+              placeholder="Bloqueados y No Bloqueados"
+              width="70"
+              borderColor={"black"}
+              onChange={filtrarPorBloqueado}
             >
               <option value="BLOQUEADOS">Bloqueados</option>
               <option value="NO BLOQUEADOS">No Bloqueados</option>
+            </Select>
+
+            <Select
+              bg="white"
+              placeholder="Choferes y Pasajeros"
+              width="70"
+              borderColor={"black"}
+              onChange={filtrarPorChofer}
+            >
               <option value="CHOFERES">Choferes</option>
-              <option value="NO CHOFERES">No Choferes</option>
+              <option value="PASAJEROS">Pasajeros</option>
             </Select>
           </Box>
           <Box
@@ -270,40 +349,51 @@ export default function ListaUsuarios() {
                   <>
                     {" "}
                     <Text>Email: {usuarioSeleccionado.email}</Text>
+                    <ThickDivider />
                     <Text>
                       Nombre: {usuarioSeleccionado.username}{" "}
                       {usuarioSeleccionado.surname}
                     </Text>
+                    <ThickDivider />
                     <Text>Rating: {usuarioSeleccionado.ratings}/5</Text>
+                    <ThickDivider />
                     <Text>
                       Bloqueado: {usuarioSeleccionado.blocked ? "Si" : "No"}
                     </Text>
+                    <ThickDivider />
                   </>
                 ) : null}
 
                 {usuarioSeleccionado && usuarioSeleccionado.driver != null ? (
                   <>
                     <Text>
-                      License Plate: {usuarioSeleccionado.driver.licence_plate}
+                      Patente: {usuarioSeleccionado.driver.licence_plate}
                     </Text>
+                    <ThickDivider />
                     <Text>
-                      Vehicle Model: {usuarioSeleccionado.driver.model}
+                      Modelo de Vehiculo: {usuarioSeleccionado.driver.model}
                     </Text>
+                    <ThickDivider />
                     <Text>
-                      Driver Rating: {usuarioSeleccionado.driver.ratings}
+                      Rating chofer: {usuarioSeleccionado.driver.ratings}
                     </Text>
+                    <ThickDivider />
                   </>
                 ) : null}
               </ModalBody>
 
               <ModalFooter>
-                <Button variant="ghost" mr={3} onClick={onClose}>
+                <Button colorScheme="blackAlpha" mr={3} onClick={onClose}>
                   Cerrar
                 </Button>
                 <Button
-                  colorScheme="blue"
+                  colorScheme="teal"
                   margin={5}
                   onClick={() => {
+                    if(usuarioSeleccionado.blocked){
+                      alert("El usuario esta bloqueado, desbloqueelo para cargarle saldo");
+                      return;
+                    }
                     onOpen2();
                     getSystemBalance();
                     getUserBalance();
@@ -312,7 +402,7 @@ export default function ListaUsuarios() {
                   Cargar Saldo
                 </Button>
                 <Button
-                  colorScheme="blue"
+                  colorScheme="teal"
                   onClick={async () => {
                     usuarioSeleccionado && usuarioSeleccionado.blocked
                       ? handleUnblock()
@@ -344,25 +434,36 @@ export default function ListaUsuarios() {
                 {usuarioSeleccionado ? (
                   <>
                     <Text>Carga de saldo para {usuarioSeleccionado.email}</Text>
+                    <ThickDivider />
+
                     <Text>
                       Balance disponible:{" "}
-                      {balance ? balance + " ETH" : "Cargando..."}
+                      {balance ? balance + " ETH" : <Spinner size="xs" />}
                     </Text>
+                    <ThickDivider />
+
                     <Text>
                       Balance del usuario:{" "}
-                      {userBalance ? userBalance + " ETH" : "Cargando..."}
+                      {userBalance ? (
+                        userBalance + " ETH"
+                      ) : (
+                        <Spinner size="xs" />
+                      )}
                     </Text>
+                    <ThickDivider />
+
                     <FormLabel marginTop={3} fontWeight={"bold"}>
                       Cantidad a cargar
                     </FormLabel>
                     <Input
+                      variant="filled"
+                      borderColor={"black"}
                       marginTop={1}
-                      bg="white"
                       w={"60%"}
                       type=""
                       placeholder="ETH..."
                       onChange={(e) => {
-                        setBalanceCharge(parseFloat(e.target.value))
+                        setBalanceCharge(parseFloat(e.target.value));
                       }}
                     />
                   </>
@@ -371,7 +472,7 @@ export default function ListaUsuarios() {
               <ModalFooter>
                 {" "}
                 <Button
-                  variant="ghost"
+                  colorScheme="blackAlpha"
                   mr={3}
                   onClick={() => {
                     onClose2();
@@ -381,33 +482,55 @@ export default function ListaUsuarios() {
                 >
                   Cerrar
                 </Button>
-                <Button colorScheme="blue" margin={5} onClick={async () => {
-                  if (balanceCharge > 0.2){
-                    alert("No esta permitido cargar una cantidad mayor a 0.2 ETH")
-                    return
-                  }
+                <Button
+                  colorScheme="teal"
+                  margin={5}
+                  onClick={async () => {
+                    if (balanceCharge > 0.2) {
+                      alert(
+                        "No esta permitido cargar una cantidad mayor a 0.2 ETH"
+                      );
+                      return;
+                    }
 
-                  if (!balanceCharge){
-                    alert("Debe ingresar una cantidad a cargar")
-                    return
-                  }
+                    if (balanceCharge < 0.0001) {
+                      alert(
+                        "No esta permitido cargar una cantidad menor a 0.0001 ETH"
+                      );
+                      return;
+                    }
 
-                  try {
-                    let token = context.token.value()
-                    let response = tryDeposit(token, usuarioSeleccionado.email, balanceCharge)
-                  }
-                  catch(e){
-                    console.log(e)
-                    alert("No se pudo cargar el saldo")
-                    return
-                  }                  
-                  setBalance(null)
-                  setUserBalance(null)
-                  setBalanceCharge(null)
-                  onClose2()
-                  alert("Cargando: " + balanceCharge + " ETH al usuario: " + usuarioSeleccionado.email + "\n" + "El saldo puede tardar unos segundos en actualizarse")
-                  
-                }}>
+                    if (!balanceCharge) {
+                      alert("Debe ingresar una cantidad a cargar");
+                      return;
+                    }
+
+                    try {
+                      let token = context.token.value();
+                      let response = tryDeposit(
+                        token,
+                        usuarioSeleccionado.email,
+                        balanceCharge
+                      );
+                    } catch (e) {
+                      console.log(e);
+                      alert("No se pudo cargar el saldo");
+                      return;
+                    }
+                    setBalance(null);
+                    setUserBalance(null);
+                    setBalanceCharge(null);
+                    onClose2();
+                    alert(
+                      "Cargando: " +
+                        balanceCharge +
+                        " ETH al usuario: " +
+                        usuarioSeleccionado.email +
+                        "\n" +
+                        "El saldo puede tardar unos segundos en actualizarse"
+                    );
+                  }}
+                >
                   Cargar
                 </Button>
               </ModalFooter>
@@ -415,7 +538,11 @@ export default function ListaUsuarios() {
           </Modal>
         </Box>
       ) : (
-        <Text>Cargando...</Text>
+        <Box>
+          <Center marginTop={150}>
+            <Spinner size="xl" />
+          </Center>
+        </Box>
       )}
     </div>
   );

@@ -3,6 +3,7 @@ import { GetUserContext } from "./UserContext";
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { tryGetCurrentPricing, tryModifyPricingRules } from "./Backend";
+import makeAnimated from "react-select/animated";
 
 import {
   Box,
@@ -40,7 +41,7 @@ function translateDay(dayNumber) {
       result = "Tuesday";
       break;
     case 2:
-      result = "Wednesday"
+      result = "Wednesday";
       break;
     case 3:
       result = "Thursday";
@@ -55,7 +56,7 @@ function translateDay(dayNumber) {
       result = "Sunday";
       break;
   }
-  return result
+  return result;
 }
 export default function ReglasCotizacion() {
   const context = GetUserContext();
@@ -106,6 +107,8 @@ export default function ReglasCotizacion() {
     setBusyDays(newList);
     console.log(newList);
   }, [lunes, martes, miercoles, jueves, viernes, sabado, domingo]);
+
+  const animatedComponents = makeAnimated();
   if (!context.userStatus.isLoggedIn) {
     return <h2>{PAGE_UNAVAILABLE_MSG}</h2>;
   }
@@ -141,6 +144,14 @@ export default function ReglasCotizacion() {
 
             <Select
               isMulti
+              styles={{
+                control: (baseStyles, state) => ({
+                  ...baseStyles,
+                  borderColor: 'black',
+                  boxShadow: "none",
+                })}}
+              components={animatedComponents}
+              placeholder="Horas..."
               onChange={(valores) => {
                 console.log(valores);
                 setBusyHours(valores.map((valor) => valor.value));
@@ -160,6 +171,7 @@ export default function ReglasCotizacion() {
           </FormLabel>
           <Input
             marginTop={2}
+            borderColor={"black"}
             bg="white"
             w={"60%"}
             type=""
@@ -179,6 +191,7 @@ export default function ReglasCotizacion() {
           </FormLabel>
           <Input
             marginTop={2}
+            borderColor={"black"}
             bg="white"
             w={"60%"}
             type=""
@@ -198,6 +211,7 @@ export default function ReglasCotizacion() {
           </FormLabel>
           <Input
             marginTop={2}
+            borderColor={"black"}
             bg="white"
             w={"60%"}
             type=""
@@ -218,6 +232,7 @@ export default function ReglasCotizacion() {
           </FormLabel>
           <Input
             marginTop={2}
+            borderColor={"black"}
             bg="white"
             w={"60%"}
             type=""
@@ -238,6 +253,7 @@ export default function ReglasCotizacion() {
           <Input
             marginTop={2}
             bg="white"
+            borderColor={"black"}
             w={"60%"}
             type=""
             placeholder="Costo..."
@@ -258,6 +274,7 @@ export default function ReglasCotizacion() {
           </FormLabel>
           <Input
             marginTop={2}
+            borderColor={"black"}
             bg="white"
             w={"60%"}
             type=""
@@ -352,7 +369,9 @@ export default function ReglasCotizacion() {
                   Base: ${response.data.base} 
                   Busy Hours: ${response.data.busy_hours}
                   Busy Hours extra charge: ${response.data.busy_hours_extra}
-                  Special days of week: ${response.data.days_of_week.map((day) => translateDay(day))}
+                  Special days of week: ${response.data.days_of_week.map(
+                    (day) => translateDay(day)
+                  )}
                   Special days extra charge: ${response.data.week_day_extra}
                   Distance cost multiplier: ${response.data.distance}
                   Duration cost multiplier: ${response.data.duration}

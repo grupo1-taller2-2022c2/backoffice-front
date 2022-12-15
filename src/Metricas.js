@@ -1,6 +1,8 @@
 import { GATEWAY_URL, PAGE_UNAVAILABLE_MSG } from "./Constants";
 import { GetUserContext } from "./UserContext";
 import React, { useState, useEffect } from "react";
+import { Spinner } from "@chakra-ui/react";
+
 import {
   Box,
   Button,
@@ -137,12 +139,13 @@ export default function Metricas() {
         <Box className="arriba" display="flex">
           <Box margin={5} className="registrations">
             <FormLabel>Registros</FormLabel>
-            <Select bg="white" width="60" onChange={seleccionarTipoRegistro}>
+            <Select bg="white" width="60" borderColor={"black"} onChange={seleccionarTipoRegistro} >
               <option value="mailpassword">Por email</option>
               <option value="federatedidentity">Por identidad federada</option>
             </Select>
             <FormLabel marginTop={5}>Desde...</FormLabel>
             <Input
+              borderColor={"black"}
               marginTop={5}
               bg="white"
               w={"60%"}
@@ -158,7 +161,12 @@ export default function Metricas() {
           </Box>
           <Box margin={5} className="logins">
             <FormLabel>Logins</FormLabel>
-            <Select bg="white" width="60" onChange={seleccionarTipoLogin}>
+            <Select
+              bg="white"
+              width="60"
+              onChange={seleccionarTipoLogin}
+              borderColor={"black"}
+            >
               <option value="mailpassword">Por email</option>
               <option value="federatedidentity">Por identidad federada</option>
             </Select>
@@ -168,6 +176,7 @@ export default function Metricas() {
               bg="white"
               w={"60%"}
               type="date"
+              borderColor={"black"}
               onChange={seleccionarFechaLogin}
             />
             <Text marginTop={5}>
@@ -179,12 +188,10 @@ export default function Metricas() {
         </Box>
 
         <Box margin={5} className="blocked">
-          <Text marginTop={5}>
-            Cantidad de Usuarios Bloqueados:{" "}
+          
             {cantidadUsuariosBloqueados != null
-              ? cantidadUsuariosBloqueados
-              : "Cargando..."}
-          </Text>
+              ? (<Text marginTop={5}> Cantidad de Usuarios Bloqueados: {cantidadUsuariosBloqueados} </Text>)
+              : (<Spinner marginTop={2} size="xs"/>)}
         </Box>
       </Box>
     </>
