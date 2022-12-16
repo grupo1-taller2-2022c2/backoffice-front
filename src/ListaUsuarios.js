@@ -220,6 +220,8 @@ export default function ListaUsuarios() {
       alert("Error: No se pudo bloquear al usuario");
       return;
     }
+    let userIndex = usuariosTotales.findIndex((obj => obj.email == usuarioSeleccionado.email));
+    usuariosTotales[userIndex].blocked = true
     usuarioSeleccionado.blocked = true;
     setActualizarFiltro(!actualizarFiltro);
     alert("Exito: Usuario bloqueado");
@@ -235,6 +237,8 @@ export default function ListaUsuarios() {
       alert("Error: No se pudo desbloquear al usuario");
       return;
     }
+    let userIndex = usuariosTotales.findIndex((obj => obj.email == usuarioSeleccionado.email));
+    usuariosTotales[userIndex].blocked = false
     usuarioSeleccionado.blocked = false;
     setActualizarFiltro(!actualizarFiltro);
     alert("Exito: Usuario desbloqueado");
@@ -426,7 +430,7 @@ export default function ListaUsuarios() {
                     usuarioSeleccionado && usuarioSeleccionado.blocked
                       ? handleUnblock()
                       : handleBlock();
-                    setActualizar(!actualizar);
+                    //setActualizar(!actualizar);
                   }}
                 >
                   {usuarioSeleccionado && usuarioSeleccionado.blocked
